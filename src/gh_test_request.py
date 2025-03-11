@@ -1,21 +1,25 @@
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
+
 
 # To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings. 
 # Create your PAT token by following instructions here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
 
 # Open and read the .diff file as a text
 
-with open("src/diff_example/changes.diff", "r", encoding="utf-8") as file:
+with open("diff.txt", "r", encoding="utf-8") as file:
     diff_content = file.read()
 
 print(diff_content)
+load_dotenv()
 
 
+API_KEY = os.getenv("GH_GPT4_API_KEY")
 
 client = OpenAI(
     base_url="https://models.inference.ai.azure.com",
-    api_key="" ## TODO: Place the token this in an ENV variable
+    api_key=API_KEY
 )
 
 
@@ -36,25 +40,39 @@ prompt = f"""You are an expert technical writer specializing in software documen
 print(prompt)
 
 
+def summarize_changes(prompt):
+    print("...Generating AsciiDoc documentation based on the provided `.diff")
+    
+    response = client.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": "",
+            },
+            {
+                "role": "developer",
+                "content": prompt
+            }
+        ],
+        model="gpt-4o",
+        temperature=1,
+        max_tokens=4096,
+        top_p=1
+    )
+    print(response.choices[0].message.content) ##  OUTPUT: The generated AsciiDoc documentation based on the provided `.diff` file.
 
-response = client.chat.completions.create(
-    messages=[
-        {
-            "role": "system",
-            "content": "",
-        },
-        {
-            "role": "developer",
-            "content": prompt
-        }
-    ],
-    model="gpt-4o",
-    temperature=1,
-    max_tokens=4096,
-    top_p=1
-)
+    
+    return response.choices[0].message.content
 
-print(response.choices[0].message.content) ##  OUTPUT: The generated AsciiDoc documentation based on the provided `.diff` file.
+
+if __name__ == "__main__":
+
+    summary = summarize_changes(prompt)
+    with open("summary.adoc", "w") as f:
+        f.write(summary) ## Write the generated AsciiDoc documentation to a summary.adoc file
+
+    print("Doc Summary en summary.adoc")
+
 
 
 # ```adoc
