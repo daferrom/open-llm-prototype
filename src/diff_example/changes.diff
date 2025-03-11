@@ -1,0 +1,10 @@
+diff --git a/src/diff_example/calculator.js b/src/diff_example/calculator.js
+index f1c75be..c53fe9e 100644
+--- a/src/diff_example/calculator.js
++++ b/src/diff_example/calculator.js
+@@ -1,3 +1,4 @@
+ function sumar(a, b) {
++    console.log(`Sumando ${a} + ${b}`);
+     return a + b;
+ }
+\ No newline at end of file
