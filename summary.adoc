@@ -1,0 +1,111 @@
+```adoc
+= Documentation: Changes Introduced in `get_diff.py`
+
+== Diff Input:
+```diff
+diff --git a/src/scripts/get_diff.py b/src/scripts/get_diff.py
+new file mode 100644
+index 0000000..510b38d
+--- /dev/null
++++ b/src/scripts/get_diff.py
+@@ -0,0 +1,12 @@
++import subprocess
++
++def get_git_diff():
++    """Get the .diff file of the last commit."""
++    diff = subprocess.run(["git", "diff", "HEAD^"], capture_output=True, text=True)
++    return diff.stdout
++
++if __name__ == "__main__":
++    diff_text = get_git_diff()
++    with open("diff.txt", "w") as f:
++        f.write(diff_text)
++    print("Changes Detected on diff.txt")
+\ No newline at end of file
+```
+
+== Summary of Modifications
+
+=== New Script: `get_diff.py`
+- A new file `src/scripts/get_diff.py` has been added to the codebase.
+- This script provides functionality for generating a `.diff` file containing changes made in the most recent Git commit.
+
+== Description of Changes
+
+1. **New Functionality:**
+   - A new Python function, `get_git_diff()`, has been implemented:
+     - **Purpose:** Fetches the `.diff` output for the last Git commit.
+     - **Implementation:** Utilizes the `subprocess.run()` function to execute the `git diff HEAD^` command.
+       - Parameters: 
+         - `capture_output=True`: Captures the standard output and standard error.
+         - `text=True`: Ensures the captured output is returned as a string rather than bytes.
+       - Returns: A string containing the `.diff` output from the last commit.
+   - This function adds convenience for programmatically fetching Git diff details.
+
+2. **File I/O Operations:**
+   - The script writes the diff data retrieved by `get_git_diff()` to a file named `diff.txt`:
+     - A file object is opened in write mode using the `with open()` syntax for safer file handling.
+     - The diff content is written to the file.
+
+3. **Execution Logic:**
+   - The script includes a main script block (`if __name__ == "__main__"`):
+     - Executes the `get_git_diff()` function.
+     - Writes the diff output to the file.
+     - Prints a message to the console, `Changes Detected on diff.txt`, indicating successful operation.
+
+== Impact Analysis
+
+1. **New Features:**
+   - Enables automated generation of Git diff reports, which could be integrated into CI/CD pipelines for tracking code changes or generating changelogs.
+
+2. **No Backward Compatibility Issues:**
+   - Since this file is newly added and does not replace or modify existing functionality, there are no backward compatibility concerns.
+
+3. **Performance Consideration:**
+   - Running the `git diff` command relies on the performance of the Git binary and repository size. In large repositories, the process may take noticeable time to complete.
+
+4. **File Output Behavior:**
+   - The generated file `diff.txt` is created in the script's working directory. If the file already exists, its content will be overwritten. This behavior should be noted in case the script runs multiple times or concurrently.
+
+== Example Usage
+
+=== Running the Script
+To execute the script and generate the Git diff for the last commit, run the following command:
+
+```
+python src/scripts/get_diff.py
+```
+
+=== Result
+- A file, `diff.txt`, is created with the content of the diff for the latest Git commit.
+- An example of the console output after running the script:
+  ```
+  Changes Detected on diff.txt
+  ```
+
+=== Example `diff.txt` Content
+Assuming the last Git commit contains changes, the `diff.txt` file will have content similar to the following:
+
+```
+diff --git a/example.txt b/example.txt
+index 1234567..89abcde 100644
+--- a/example.txt
++++ b/example.txt
+@@ -1,3 +1,3 @@
+-Old line
++New line
+ Another unchanged line
+```
+
+== Recommendations and Notes
+- **Error Handling (Future Enhancement):**
+  - Currently, no error handling is implemented for cases like:
+      - Non-Git repositories.
+      - Failures when running `git diff`.
+  - Consider adding checks to handle these scenarios gracefully.
+- **Custom Diff Options:**
+  - Users might need custom Git diff options. In future updates, allow passing arguments to the `git diff` command.
+- **Concurrent Execution:**
+  - There is no mechanism to handle concurrent runs of the script that might overwrite the `diff.txt` file. Using unique filenames or temporary directories could mitigate this issue.
+
+```
