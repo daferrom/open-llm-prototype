@@ -43,4 +43,10 @@ jobs:
             cat diff.txt || echo " diff.txt file empty or not found"
 
 
+      - name: Generate documentation using GPT4 model
+        env:
+              GH_GPT4_API_KEY: ${{ secrets.GH_GPT4_API_KEY }}
+        run: |
+            python src/scripts/gh_test_request.py
+
 
