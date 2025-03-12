@@ -1,0 +1,64 @@
+diff --git a/diff.txt b/diff.txt
+index 0b48f41..e69de29 100644
+--- a/diff.txt
++++ b/diff.txt
+@@ -1,22 +0,0 @@
+-diff --git a/diff.txt b/diff.txt
+-new file mode 100644
+-index 0000000..e69de29
+-diff --git a/src/scripts/get_diff.py b/src/scripts/get_diff.py
+-new file mode 100644
+-index 0000000..510b38d
+---- /dev/null
+-+++ b/src/scripts/get_diff.py
+-@@ -0,0 +1,12 @@
+-+import subprocess
+-+
+-+def get_git_diff():
+-+    """Get the .diff file of the last commit."""
+-+    diff = subprocess.run(["git", "diff", "HEAD^"], capture_output=True, text=True)
+-+    return diff.stdout
+-+
+-+if __name__ == "__main__":
+-+    diff_text = get_git_diff()
+-+    with open("diff.txt", "w") as f:
+-+        f.write(diff_text)
+-+    print("Changes Detected on diff.txt")
+-\ No newline at end of file
+diff --git a/src/scripts/get_diff.py b/src/scripts/get_diff.py
+index 510b38d..c70a31c 100644
+--- a/src/scripts/get_diff.py
++++ b/src/scripts/get_diff.py
+@@ -1,12 +1,29 @@
+ import subprocess
++import os
++
++
++# Get workspace directory from GitHub Actions
++workspace = os.getenv("GITHUB_WORKSPACE", "LOCAL")
++print("Workspace:", workspace)
++
++# Set diff file path
++diff_file_path = os.path.join(workspace, "diff.txt")
++
++# Overwrite diff_file_path if running locally
++if workspace is "LOCAL":
++    print("Running locally...")
++    diff_file_path = "diff.txt"
++
++
++#TODO: This can be converted to a git command
+ 
+ def get_git_diff():
+-    """Get the .diff file of the last commit."""
++    """Get the .diff file of the last  HEAD commit and the previous one"""
+     diff = subprocess.run(["git", "diff", "HEAD^"], capture_output=True, text=True)
+     return diff.stdout
+ 
+ if __name__ == "__main__":
+     diff_text = get_git_diff()
+-    with open("diff.txt", "w") as f:
++    with open(diff_file_path, "w") as f:
+         f.write(diff_text)
+     print("Changes Detected on diff.txt")
+\ No newline at end of file
