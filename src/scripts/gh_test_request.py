@@ -23,10 +23,14 @@ print("Diff file path:", diff_file_path)
 
 # Open and read the .diff file as a text
 
+diff_text = ""
+
 with open(diff_file_path, "r", encoding="utf-8") as file:
     diff_content = file.read()
+    print("diff file content in with: ", diff_content)
+    diff_text = diff_content
 
-print("diff file content: ", diff_content)
+print("diff text content: ", diff_text)
 
 # Load .env only on local execution
 
@@ -59,34 +63,34 @@ prompt = f"""You are an expert technical writer specializing in software documen
 
             ## Diff Input:
             ```diff
-            {diff_content}
+            {diff_text}
             """
 print(prompt)
 
 
-def summarize_changes(prompt):
-    print("...Generating AsciiDoc documentation based on the provided `.diff")
+# def summarize_changes(prompt):
+#     print("...Generating AsciiDoc documentation based on the provided `.diff")
     
-    response = client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": "",
-            },
-            {
-                "role": "developer",
-                "content": prompt
-            }
-        ],
-        model="gpt-4o",
-        temperature=1,
-        max_tokens=4096,
-        top_p=1
-    )
-    print(response.choices[0].message.content) ##  OUTPUT: The generated AsciiDoc documentation based on the provided `.diff` file.
+#     response = client.chat.completions.create(
+#         messages=[
+#             {
+#                 "role": "system",
+#                 "content": "",
+#             },
+#             {
+#                 "role": "developer",
+#                 "content": prompt
+#             }
+#         ],
+#         model="gpt-4o",
+#         temperature=1,
+#         max_tokens=4096,
+#         top_p=1
+#     )
+#     print(response.choices[0].message.content) ##  OUTPUT: The generated AsciiDoc documentation based on the provided `.diff` file.
 
     
-    return response.choices[0].message.content
+#     return response.choices[0].message.content
 
 
 if __name__ == "__main__":
