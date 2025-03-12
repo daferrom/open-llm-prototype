@@ -36,10 +36,11 @@ jobs:
         run: |
             python src/scripts/get_diff.py
 
-      - name: Generate documentation using GPT4 model
-        env:
-              GH_GPT4_API_KEY: ${{ secrets.GH_GPT4_API_KEY }}
+
+      - name: Verify diff.txt content
         run: |
-            python src/scripts/gh_test_request.py
+            ls -la
+            cat diff.txt || echo " diff.txt file empty or not found"
+
 
 
