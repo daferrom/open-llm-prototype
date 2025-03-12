@@ -19,7 +19,7 @@ if workspace is "LOCAL":
 
 def get_git_diff():
     """Get the .diff file of the last  HEAD commit and the previous one"""
-    diff = subprocess.run(["git", "diff", "HEAD^"], capture_output=True, text=True)
+    diff = subprocess.run(["git", "diff", "HEAD^","HEAD"], capture_output=True, text=True)
     return diff.stdout
 
 if __name__ == "__main__":
