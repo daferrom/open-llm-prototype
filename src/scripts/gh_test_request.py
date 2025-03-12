@@ -6,9 +6,24 @@ from dotenv import load_dotenv
 # To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings. 
 # Create your PAT token by following instructions here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
 
+# TODO: Refactor this workspace validation in an utility single module in that way can be reused in other scripts
+# Get workspace directory from GitHub Actions
+workspace = os.getenv("GITHUB_WORKSPACE", "LOCAL")
+print("Workspace:", workspace)
+
+# Set diff file path
+diff_file_path = os.path.join(workspace, "diff.txt")
+
+# Overwrite diff_file_path if running locally
+if workspace == "LOCAL":
+    print("Running locally...")
+    diff_file_path = "diff.txt"
+
+
+
 # Open and read the .diff file as a text
 
-with open("diff.txt", "r", encoding="utf-8") as file:
+with open(diff_file_path, "r", encoding="utf-8") as file:
     diff_content = file.read()
 
 print(diff_content)
