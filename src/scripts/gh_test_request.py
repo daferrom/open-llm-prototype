@@ -21,13 +21,13 @@ if os.getenv("GITHUB_ACTIONS") is None:
 
 API_KEY = os.getenv("GH_GPT4_API_KEY")
 
+if not API_KEY:
+    raise ValueError("API KEY GH_GPT4_API_KEY is not set")
+
 client = OpenAI(
     base_url="https://models.inference.ai.azure.com",
     api_key=API_KEY
 )
-
-if not API_KEY:
-    raise ValueError("API KEY GH_GPT4_API_KEY is not set")
 
 print("...USING API_KEY GH_GPT4_API_KEY....") ## OUTPUT: USING API_KEY GH_GPT$_API
 
