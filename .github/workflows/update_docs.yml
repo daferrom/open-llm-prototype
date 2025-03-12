@@ -32,21 +32,11 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
-      - name: Generate last changes diff file
-        run: |
-            python src/scripts/get_diff.py
-
-
-      - name: Verify diff.txt content
-        run: |
-            ls -la
-            cat diff.txt || echo " diff.txt file empty or not found"
-
-
-      - name: Generate documentation using GPT4 model
+      - name: Generate last changes diff file and Generate documentation using GPT4 model
         env:
               GH_GPT4_API_KEY: ${{ secrets.GH_GPT4_API_KEY }}
         run: |
+            python src/scripts/get_diff.py
+            ls -la
+            cat diff.txt || echo " diff.txt file empty or not found"
             python src/scripts/gh_test_request.py
-
-
