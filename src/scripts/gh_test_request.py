@@ -12,7 +12,11 @@ with open("diff.txt", "r", encoding="utf-8") as file:
     diff_content = file.read()
 
 print(diff_content)
-load_dotenv()
+
+# Load .env only on local execution
+
+if os.getenv("GITHUB_ACTIONS") is None:
+    load_dotenv()
 
 
 API_KEY = os.getenv("GH_GPT4_API_KEY")
@@ -21,6 +25,11 @@ client = OpenAI(
     base_url="https://models.inference.ai.azure.com",
     api_key=API_KEY
 )
+
+if not API_KEY:
+    raise ValueError("API KEY GH_GPT4_API_KEY is not set")
+
+print("...USING API_KEY GH_GPT4_API_KEY....") ## OUTPUT: USING API_KEY GH_GPT$_API
 
 
 prompt = f"""You are an expert technical writer specializing in software documentation. Your task is to generate documentation in AsciiDoc (`.adoc` format) based on the provided Git `.    diff` file. The documentation should clearly describe the modifications, including added, removed, or changed functionality.
