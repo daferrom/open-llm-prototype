@@ -23,8 +23,6 @@ print("Diff file path:", diff_file_path)
 
 # Open and read the .diff file as a text
 
-diff_content = ""
-
 with open(diff_file_path, "r", encoding="utf-8") as file:
     diff_content = file.read()
 
