@@ -19,14 +19,16 @@ if workspace == "LOCAL":
     print("Running locally...")
     diff_file_path = "diff.txt"
 
-
+print("Diff file path:", diff_file_path)
 
 # Open and read the .diff file as a text
+
+diff_content = ""
 
 with open(diff_file_path, "r", encoding="utf-8") as file:
     diff_content = file.read()
 
-print(diff_content)
+print("diff file content: ", diff_content)
 
 # Load .env only on local execution
 
