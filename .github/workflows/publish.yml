@@ -1,0 +1,35 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+ # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: CI Automation doc genetation
+
+on:
+  push:
+    branches: [ "main" ]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v3
+
+      - name: Publish in Confluence
+        uses: confluence-publisher/confluence-publisher-action@v1
+        with:
+          confluence_url: ${{ secrets.CONFLUENCE_URL }}
+          confluence_username: ${{ secrets.CONFLUENCE_USERNAME }}
+          confluence_api_token: ${{ secrets.CONFLUENCE_API_TOKEN }}
+          space_key: "MI_ESPACIO"
+          parent_page_title: "Documentación del Proyecto"
+          asciidoc_root_folder: "./docs"
+
+
+
