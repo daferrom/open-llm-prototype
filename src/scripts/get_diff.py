@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-
+# TODO: Refactor this worskpace validation in an utility single module in that way can be reused in other scripts
 # Get workspace directory from GitHub Actions
 workspace = os.getenv("GITHUB_WORKSPACE", "LOCAL")
 print("Workspace:", workspace)
@@ -10,7 +10,7 @@ print("Workspace:", workspace)
 diff_file_path = os.path.join(workspace, "diff.txt")
 
 # Overwrite diff_file_path if running locally
-if workspace is "LOCAL":
+if workspace == "LOCAL":
     print("Running locally...")
     diff_file_path = "diff.txt"
 
