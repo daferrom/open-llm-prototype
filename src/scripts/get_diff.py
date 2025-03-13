@@ -26,4 +26,5 @@ if __name__ == "__main__":
     diff_text = get_git_diff()
     with open(diff_file_path, "w") as f:
         f.write(diff_text)
+    print("diff_text:", diff_text)
     print("Changes Detected on diff.txt")
