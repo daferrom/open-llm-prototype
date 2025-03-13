@@ -68,29 +68,29 @@ prompt = f"""You are an expert technical writer specializing in software documen
 print(prompt)
 
 
-# def summarize_changes(prompt):
-#     print("...Generating AsciiDoc documentation based on the provided `.diff")
+def summarize_changes(prompt):
+    print("...Generating AsciiDoc documentation based on the provided `.diff")
     
-#     response = client.chat.completions.create(
-#         messages=[
-#             {
-#                 "role": "system",
-#                 "content": "",
-#             },
-#             {
-#                 "role": "developer",
-#                 "content": prompt
-#             }
-#         ],
-#         model="gpt-4o",
-#         temperature=1,
-#         max_tokens=4096,
-#         top_p=1
-#     )
-#     print(response.choices[0].message.content) ##  OUTPUT: The generated AsciiDoc documentation based on the provided `.diff` file.
+    response = client.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": "",
+            },
+            {
+                "role": "developer",
+                "content": prompt
+            }
+        ],
+        model="gpt-4o",
+        temperature=1,
+        max_tokens=4096,
+        top_p=1
+    )
+    print(response.choices[0].message.content) ##  OUTPUT: The generated AsciiDoc documentation based on the provided `.diff` file.
 
     
-#     return response.choices[0].message.content
+    return response.choices[0].message.content
 
 
 if __name__ == "__main__":
