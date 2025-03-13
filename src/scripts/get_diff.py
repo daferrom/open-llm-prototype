@@ -4,7 +4,7 @@ import os
 # TODO: Refactor this worskpace validation in an utility single module in that way can be reused in other scripts
 # Get workspace directory from GitHub Actions
 workspace = os.getenv("GITHUB_WORKSPACE", "LOCAL")
-print("Workspace:", workspace)
+print("Workspace before local validation:", workspace)
 
 # Set diff file path
 diff_file_path = os.path.join(workspace, "diff.txt")
@@ -14,6 +14,8 @@ if workspace == "LOCAL":
     print("Running locally...")
     diff_file_path = "diff.txt"
 
+print("Workspace after local validation:", workspace)
+print("Diff file path:", diff_file_path)
 
 #TODO: This can be converted to a git command
 
