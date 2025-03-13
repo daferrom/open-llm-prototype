@@ -47,3 +47,11 @@ jobs:
             ls -la $GITHUB_WORKSPACE
             cat $GITHUB_WORKSPACE/diff.txt || echo "Archivo diff.txt vacío o no encontrado"
             python src/scripts/gh_test_request.py
+
+      - name: Create Doc page on Confluence
+        env:
+            MY_EMAIL: ${{ secrets.MY_EMAIL }}
+            CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+            CONFLUENCE_SPACE_KEY: ${{ secrets.CONFLUENCE_SPACE_KEY }}
+        run:
+            python src/scripts/create_confluence.py
