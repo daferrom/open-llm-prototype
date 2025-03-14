@@ -3,6 +3,12 @@ import subprocess
 import json
 from dotenv import load_dotenv
 import os
+import sys
+
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from confluence_service.pages_service import post_subpage  # Importar la función
 
 
 # Load env variables from .env
@@ -16,9 +22,9 @@ EMAIL = os.getenv("MY_EMAIL")
 API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
 # This would be the reference SPACE of the project en confluence
 SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY") ##
-
+SPACE_ID = "295237"
+PARENT_CODA_DOC_PAGE_ID = "5734416" # CoDa Documentation parent Page ID
 CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api/content"
-
 ADOC_FILE = "summary.adoc"
 
 # Convert AsciiDoc to XHTML
@@ -36,14 +42,8 @@ def convert_adoc_to_xhtml(adoc_file):
         return None
 
 
-
-# Headers and auth
-headers = {
-    "Content-Type": "application/json"
-}
 auth = (EMAIL, API_TOKEN)
 
-# Publish content to confluence
 def publish_to_confluence(title,  content_xhtml):
 
     # Set data Page payload
@@ -72,8 +72,30 @@ def publish_to_confluence(title,  content_xhtml):
         print("❌ Error creating the page:", response.status_code)
         print(response.text)
 
-XHTML_DOC_TO_PUBLISH = convert_adoc_to_xhtml(ADOC_FILE)
-print(XHTML_DOC_TO_PUBLISH)
 
-publish_to_confluence("CoDA DOC from README", XHTML_DOC_TO_PUBLISH)
+# Publish a child page in a confluence page in content
+def publish_confluence_subpage(page_title):
+    post_subpage(space_id=SPACE_ID, title=page_title, parent_id=PARENT_CODA_DOC_PAGE_ID, content_xhtml=XHTML_DOC_TO_PUBLISH)
+
+
+# Extract title from AsciiDoc file
+def extract_adoc_title(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+        for line in file:
+            line = line.strip()
+            if line.startswith("="):  # Detecta el título en AsciiDoc
+                return line.lstrip("= ").strip()  # Elimina '=' y espacios adicionales
+    return None  # Si no encuentra título
+
+# Ejemplo de uso
+doc_title = extract_adoc_title(ADOC_FILE)
+print(doc_title)
+
+
+XHTML_DOC_TO_PUBLISH = convert_adoc_to_xhtml(ADOC_FILE)
+print(".....XHTML_DOC_TO_PUBLISH......", XHTML_DOC_TO_PUBLISH)
+
+# publish_to_confluence("Change diff_content handling", XHTML_DOC_TO_PUBLISH)
+
+publish_confluence_subpage(doc_title)
 
