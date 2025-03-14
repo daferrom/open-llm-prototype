@@ -14,7 +14,8 @@ if os.getenv("GITHUB_ACTIONS") is None:
 
 EMAIL = os.getenv("MY_EMAIL")
 API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
-SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
+# This would be the reference SPACE of the project en confluence
+SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY") ##
 
 CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api/content"
 
@@ -74,5 +75,5 @@ def publish_to_confluence(title,  content_xhtml):
 XHTML_DOC_TO_PUBLISH = convert_adoc_to_xhtml(ADOC_FILE)
 print(XHTML_DOC_TO_PUBLISH)
 
-publish_to_confluence("NEW TEST PAGE CONFLUENCE PUBLISH 1", XHTML_DOC_TO_PUBLISH)
+publish_to_confluence("CoDA DOC from README", XHTML_DOC_TO_PUBLISH)
 
