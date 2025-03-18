@@ -74,8 +74,8 @@ def publish_to_confluence(title,  content_xhtml):
 
 
 # Publish a child page in a confluence page in content
-def publish_confluence_subpage(page_title):
-    post_subpage(space_id=SPACE_ID, title=page_title, parent_id=PARENT_CODA_DOC_PAGE_ID, content_xhtml=XHTML_DOC_TO_PUBLISH)
+def publish_confluence_subpage(page_title, xhtml_content):
+    post_subpage(space_id=SPACE_ID, title=page_title, parent_id=PARENT_CODA_DOC_PAGE_ID, content_xhtml=xhtml_content)
 
 
 # Extract title from AsciiDoc file
@@ -97,5 +97,8 @@ print(".....XHTML_DOC_TO_PUBLISH......", XHTML_DOC_TO_PUBLISH)
 
 # publish_to_confluence("Change diff_content handling", XHTML_DOC_TO_PUBLISH)
 
-publish_confluence_subpage(doc_title)
+with open("summary.xhtml", "r", encoding="utf-8") as file:
+    xhtml_content = file.read()
+
+publish_confluence_subpage("Update to GitHub Workflow for Documentation Publishing TEST 1.0.0", xhtml_content)
 
