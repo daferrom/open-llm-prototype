@@ -51,6 +51,38 @@ This project is a prototype for automating the generation of documentation using
    python src/scripts/create_confluence_doc.py
    ```
 
+## Running yml GitHub Actions workflow locally
+
+1. **Install act**
+
+   *On Mac or Linux*
+
+   ```sh
+   brew install act
+   ```
+   or
+
+   ```sh
+   curl -s https://raw.githubusercontent.com/nektos/act/main/install.sh | sudo bash
+   ```
+
+   *On Windows*
+
+   ```sh
+   scoop install act
+   ```
+
+2. **Install Docker** #TODO: UPDATE DOCS...
+
+3. **Runr yml file locally**
+
+   This simulates the Github Workflow locally
+   ```sh
+   act pull_request -e event.json --secret-file .secrets
+   ```
+
+
+
 ### Running the Workflow on GitHub Actions
 
 The workflow is triggered on every push to the `main` branch. It performs the following steps:
