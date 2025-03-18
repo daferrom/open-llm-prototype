@@ -10,7 +10,6 @@ asgiref==3.8.1
 async-timeout==5.0.1
 attrs==25.1.0
 beautifulsoup4==4.13.3
-bentoml==1.4.3
 cattrs==23.1.2
 certifi==2025.1.31
 charset-normalizer==3.4.1
@@ -45,7 +44,6 @@ multidict==6.1.0
 numpy==2.0.2
 nvidia-ml-py==12.570.86
 openai==1.61.1
-openllm==0.6.19
 opentelemetry-api==1.30.0
 opentelemetry-instrumentation==0.51b0
 opentelemetry-instrumentation-aiohttp-client==0.51b0
