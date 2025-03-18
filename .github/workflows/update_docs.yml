@@ -47,7 +47,7 @@ jobs:
 
       - name: Generate diff file
         run: |
-            git fetch origin main --depth=1
+            git fetch --unshallow || git fetch
             MERGE_COMMIT=${{ github.event.pull_request.merge_commit_sha }}
             git diff $MERGE_COMMIT^ $MERGE_COMMIT > diff.txt
             if [ ! -s diff.txt ]; then echo "No changes detected" > diff.txt; fi
