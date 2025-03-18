@@ -26,7 +26,10 @@ jobs:
       - name: Code Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+
+      - name: Fetch main branch
+        run: git fetch origin main
 
       - name: Configure Python
         uses: actions/setup-python@v3
@@ -45,7 +48,7 @@ jobs:
         env:
               GH_GPT4_API_KEY: ${{ secrets.GH_GPT4_API_KEY }}
         run: |
-            python src/scripts/get_diff.py
+            git diff origin/main...HEAD > diff.txt
             ls -la
             cat diff.txt || echo " diff.txt file empty or not found"
             ls -la $GITHUB_WORKSPACE
