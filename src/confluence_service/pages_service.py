@@ -57,6 +57,7 @@ def post_subpage(space_id="", title="", parent_id="", content_xhtml=""):
             "representation": "storage",
             "value": content_xhtml
     }})
+    print("🚀 Posting Sub-Page to Confluence with your payload")
 
     ## POST request to create sub-page
     response = requests.post(BASE_URL, headers=headers, auth=auth, data=payload)
