@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 # Load env variables from .env
 if os.getenv("GITHUB_ACTIONS") is None:
-    print("...Running create confluence doc from local")
+    print("...Running Pages Service confluence doc from local")
     load_dotenv()
     
     
@@ -70,7 +70,8 @@ def post_subpage(space_id="", title="", parent_id="", content_xhtml=""):
 
 
 
-get_child_pages(PARENT_CODA_DOC_PAGE_ID)
+# get_child_pages(PARENT_CODA_DOC_PAGE_ID)
 
-
+if __name__ == "__main__":
+    print("...Running Pages Service confluence doc")
 
