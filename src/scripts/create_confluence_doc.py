@@ -1,9 +1,9 @@
 import requests
-import subprocess
 import json
 from dotenv import load_dotenv
 import os
 import sys
+from bs4 import BeautifulSoup
 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -25,22 +25,7 @@ SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY") ##
 SPACE_ID = "295237"
 PARENT_CODA_DOC_PAGE_ID = "5734416" # CoDa Documentation parent Page ID
 CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api/content"
-ADOC_FILE = "summary.adoc"
-
-# Convert AsciiDoc to XHTML
-def convert_adoc_to_xhtml(adoc_file):
-    try:
-        result = subprocess.run(
-            ["asciidoctor", "-o", "-", "-s", "--backend=html5", adoc_file],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return result.stdout
-    except subprocess.CalledProcessError as e:
-        print("❌ Error al convertir AsciiDoc:", e)
-        return None
-
+XHTML_DOC_PATH = "summary.xhtml"
 
 auth = (EMAIL, API_TOKEN)
 
@@ -78,27 +63,30 @@ def publish_confluence_subpage(page_title, xhtml_content):
     post_subpage(space_id=SPACE_ID, title=page_title, parent_id=PARENT_CODA_DOC_PAGE_ID, content_xhtml=xhtml_content)
 
 
-# Extract title from AsciiDoc file
-def extract_adoc_title(file_path):
-    with open(file_path, "r", encoding="utf-8") as file:
-        for line in file:
-            line = line.strip()
-            if line.startswith("="):  # Detecta el título en AsciiDoc
-                return line.lstrip("= ").strip()  # Elimina '=' y espacios adicionales
-    return None  # Si no encuentra título
-
-# Ejemplo de uso
-doc_title = extract_adoc_title(ADOC_FILE)
-print(doc_title)
-
-
-XHTML_DOC_TO_PUBLISH = convert_adoc_to_xhtml(ADOC_FILE)
-print(".....XHTML_DOC_TO_PUBLISH......", XHTML_DOC_TO_PUBLISH)
 
 # publish_to_confluence("Change diff_content handling", XHTML_DOC_TO_PUBLISH)
 
-with open("summary.xhtml", "r", encoding="utf-8") as file:
+with open(XHTML_DOC_PATH, "r", encoding="utf-8") as file:
     xhtml_content = file.read()
 
-publish_confluence_subpage("Update to GitHub Workflow for Documentation Publishing TEST 1.0.0", xhtml_content)
+
+
+# Extract the title from the XHTML content
+
+# Remove markdown code block markers if present
+xhtml_content = xhtml_content.strip()
+if xhtml_content.startswith("```xml"):
+    xhtml_content = xhtml_content[7:]  # Remove ```xml
+if xhtml_content.endswith("```"):
+    xhtml_content = xhtml_content[:-3]  # Remove ```
+
+soup = BeautifulSoup(xhtml_content, "lxml-xml")  # Use "lxml-xml" for valid XHTML
+
+# Look for the <head> and then the <title>
+head = soup.find("head")
+title = head.find("title").string if head and head.find("title") else "No title found"
+
+
+print(f".....PUBLISHING XHTML DOC {title}......")
+publish_confluence_subpage(title, xhtml_content)
 
