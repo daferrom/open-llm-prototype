@@ -60,6 +60,7 @@ def publish_to_confluence(title,  content_xhtml):
 
 # Publish a child page in a confluence page in content
 def publish_confluence_subpage(page_title, xhtml_content):
+    print("......page_title to publish", page_title)
     post_subpage(space_id=SPACE_ID, title=page_title, parent_id=PARENT_CODA_DOC_PAGE_ID, content_xhtml=xhtml_content)
 
 
