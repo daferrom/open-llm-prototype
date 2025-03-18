@@ -11,7 +11,7 @@ if os.getenv("GITHUB_ACTIONS") is None:
     load_dotenv()
 
 # Configuration
-BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net//wiki/api/v2/spaces"
+BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/api/v2/spaces"
 USERNAME = os.getenv("MY_EMAIL")
 API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
 SPACE_ID = os.getenv("CONFLUENCE_SPACE_KEY")
