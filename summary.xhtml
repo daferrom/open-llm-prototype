@@ -3,68 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Update to GitHub Workflow for Documentation Publishing</title>
+    <title><!--This is the XHTML SPACE TO be completed by automated DOC-->></title>
 </head>
 <body>
-<h1>Update to GitHub Workflow for Documentation Publishing</h1>
 
-<h2>Summary</h2>
-<p>The changes refine the GitHub Actions workflow for documentation updates. The name of the workflow has been corrected, and a conditional step has been introduced to publish documentation when pull requests are successfully merged.</p>
-
-<h2>Changes</h2>
-<ul>
-    <li><strong>Modified Components:</strong> The file `.github/workflows/update_docs.yml` has been updated with the following changes:
-        <ul>
-            <li>The workflow name has been corrected from "CI Automation doc genetation" to "CI Automation doc generation".</li>
-            <li>A new trigger has been added to respond to closed pull requests.</li>
-            <li>The `publish` job has been renamed to `publish-doc-on-pr-merge`.</li>
-            <li>A condition has been added to check if a pull request was merged before executing the publish job.</li>
-        </ul>
-    </li>
-    <li><strong>Key Changes:</strong> 
-        <ul>
-            <li>Added pull request integration for documentation publishing.</li>
-            <li>Improved naming clarity for the workflow and its jobs.</li>
-            <li>Added condition to publish documentation only when pull requests are merged, optimizing workflow triggers.</li>
-        </ul>
-    </li>
-</ul>
-
-<h2>Impact</h2>
-<p>This update improves the CI/CD pipeline for documentation management. It enhances clarity in workflow and job naming and reduces unnecessary workflow runs by ensuring documentation is published only after pull requests are merged. Compatibility should not be affected significantly, and it brings better efficiency to the documentation update process.</p>
-
-<h2>Code Diff</h2>
-<pre><code>
-diff --git a/.github/workflows/update_docs.yml b/.github/workflows/update_docs.yml
-index c90588c..7d20672 100644
---- a/.github/workflows/update_docs.yml
-+++ b/.github/workflows/update_docs.yml
-@@ -4,18 +4,22 @@
- # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
- # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
--name: CI Automation doc genetation
-+name: CI Automation doc generation
-
- on:
-   push:
-     branches: [ "main" ]
-+  pull_request:
-+    types:
-+      - closed
-
- concurrency:
-   group: ci-${{ github.ref }}
-   cancel-in-progress: true
-
- jobs:
--  publish:
-+  publish-doc-on-pr-merge:
-+    if: github.event.pull_request.merged == true
-     runs-on: ubuntu-latest
-
-     steps:
-</code></pre>
 </body>
 </html>
 ```
