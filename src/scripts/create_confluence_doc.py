@@ -8,13 +8,13 @@ from bs4 import BeautifulSoup
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from confluence_service.pages_service import post_subpage  # Importar la función
+from utils import env_utils
+
+from confluence_service.pages_service import post_subpage
 
 
 # Load env variables from .env
-if os.getenv("GITHUB_ACTIONS") is None:
-    print("...Running create confluence doc from local")
-    load_dotenv()
+env_utils.load_env_if_local()
 
 # Config
 

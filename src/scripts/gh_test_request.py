@@ -1,40 +1,34 @@
+import sys
+from pathlib import Path
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
+# Add 'src' to sys.path for allowing utils import
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from utils import env_utils
 
 # To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings. 
 # Create your PAT token by following instructions here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
 
-# TODO: Refactor this workspace validation in an utility single module in that way can be reused in other scripts
-# Get workspace directory from GitHub Actions
-workspace = os.getenv("GITHUB_WORKSPACE", "LOCAL")
+# Get workspace directory
+workspace = env_utils.get_workspace()
 print("Workspace:", workspace)
 
 # Set diff file path
-diff_file_path = os.path.join(workspace, "diff.txt")
+diff_file_path = workspace / "diff.txt"
 
-# Overwrite diff_file_path if running locally
-if workspace == "LOCAL":
-    print("Running locally...")
-    diff_file_path = "diff.txt"
-
-print("Diff file path:", diff_file_path)
 
 # Open and read the .diff file as a text
-
 
 with open(diff_file_path, "r", encoding="utf-8") as file:
     diff_content = file.read()
     print("diff file content in with: ", diff_content)
-    # diff_text = diff_content
 
 
 # Load .env only on local execution
-
-if os.getenv("GITHUB_ACTIONS") is None:
-    load_dotenv()
-
+env_utils.load_env_if_local()
 
 API_KEY = os.getenv("GH_GPT4_API_KEY")
 
