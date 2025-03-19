@@ -1,18 +1,23 @@
+import sys
 import subprocess
-import os
+from pathlib import Path
+
+# Add 'src' to sys.path for allowing utils import
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from utils import env_utils
+
 
 # TODO: Refactor this worskpace validation in an utility single module in that way can be reused in other scripts
-# Get workspace directory from GitHub Actions
-workspace = os.getenv("GITHUB_WORKSPACE", ".")
+# Get workspace directory
+workspace = env_utils.get_workspace()
 print("Workspace before local validation:", workspace)
 
 # Set diff file path
-diff_file_path = os.path.join(workspace, "diff.txt")
+diff_file_path = workspace / "diff.txt"
 
-# Overwrite diff_file_path if running locally
-if workspace == ".":
-    print("Running locally...")
-    diff_file_path = "diff.txt"
+print(f"Running in {'GitHub Actions' if env_utils.is_github_actions() else 'Local'}")
+print("Diff file path:", diff_file_path)
 
 print("Workspace after local validation:", workspace)
 print("Diff file path:", diff_file_path)
