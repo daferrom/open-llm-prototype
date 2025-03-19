@@ -7,11 +7,11 @@
 name: CI Automation doc generation
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     types:
       - closed
+    branches:
+      - main
 
 concurrency:
   group: ci-${{ github.ref }}
