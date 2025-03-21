@@ -7,8 +7,6 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from utils import env_utils
 
-
-# TODO: Refactor this worskpace validation in an utility single module in that way can be reused in other scripts
 # Get workspace directory
 workspace = env_utils.get_workspace()
 print("Workspace before local validation:", workspace)
@@ -22,7 +20,6 @@ print("Diff file path:", diff_file_path)
 print("Workspace after local validation:", workspace)
 print("Diff file path:", diff_file_path)
 
-#TODO: This can be converted to a git command
 
 def get_git_diff():
     """Get the .diff file of the last  HEAD commit and the previous one"""
