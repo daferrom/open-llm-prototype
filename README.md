@@ -34,6 +34,8 @@ This project is a prototype for automating the generation of documentation using
 
 ## Usage
 
+ALWAYS MERGE THE WITH GIT SQUASH STRATEGY
+
 ### Running the Workflow Locally
 
 1. **Generate the diff file:**

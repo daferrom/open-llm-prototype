@@ -108,10 +108,8 @@ def summarize_changes(prompt):
         max_tokens=4096,
         top_p=1
     )
-    print(response.choices[0].message.content) ##  OUTPUT: The generated AsciiDoc documentation based on the provided `.diff` file.
-
-    
-    return response.choices[0].message.content
+    print(response.choices[0].message.content) 
+    return response.choices[0].message.content ##  OUTPUT: The generated XHTML Doc documentation based on the provided `.diff` file.
 
 
 if __name__ == "__main__":
