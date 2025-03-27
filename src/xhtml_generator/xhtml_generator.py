@@ -26,14 +26,23 @@ print("Diff_content",diff_content_read )
 with open("api_ai_response.json", "r", encoding="utf-8") as file:
     doctype_validation = json.load(file)
 
-doc_type = doctype_validation["documentation_type"]
+#TODO: Remove when confluence publish directs the right main DocType to publish
+# doc_type = doctype_validation["documentation_type"] # Hardcode doctype "Technical for DEMO generation"
+doc_type = "Installation & Configuration" #
+
 
 print("DOC TYPE", doc_type)
-## TODO: CALl the API AI CLIENT WITH 
+
 print("Diff_content",diff_content_read )
 
 print("Available keys in prompt_templates:", prompt_templates.keys())
-api_ai_response = client_api_ai.get_api_ai_response(prompt_templates[doc_type].format(diff_content=diff_content_read))
 
 
-print(f"XHTML Documentationn by DOC TYPE {doc_type} : ", api_ai_response)
+
+if __name__ == "__main__":
+    xhtml_doc_response = client_api_ai.get_api_ai_response(prompt_templates[doc_type].format(diff_content=diff_content_read))
+
+    with open("summary.xhtml", "w") as f:
+        f.write(xhtml_doc_response) ## Write the generated doc in xhtml
+
+    print(f"XHTML Documentation by DOC TYPE {doc_type} : ", xhtml_doc_response)
