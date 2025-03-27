@@ -97,6 +97,6 @@ def get_child_pages():
 
 
 
-# Get all confluence spaces of a user
-get_spaces()
+#   Get all confluence spaces of a user
+# get_spaces()
 get_all_pages_in_space(295237)

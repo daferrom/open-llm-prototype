@@ -17,6 +17,7 @@ BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/api/v2/pages"
 USERNAME = os.getenv("MY_EMAIL")
 API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
 PARENT_CODA_DOC_PAGE_ID = "5734416" # CoDa Documentation parent Page ID
+PARENT_LAND_USE_CLASSIFIER_PAGE_ID = "11698177"
 
 auth= HTTPBasicAuth(USERNAME, API_TOKEN)
 
@@ -69,10 +70,62 @@ def post_subpage(space_id="", title="", parent_id="", content_xhtml=""):
         print("❌ Error creating the Sub-Page:", response.status_code)
         print(response.text)
 
+def get_all_pages(max_retries=3):
+    url = f"{BASE_URL}"
+    print(url)
+    pages = []
+    
+    retries = 0
+    while url and retries < max_retries:
+        try:
+            response = requests.request(
+                "GET",
+                url,
+                headers={
+                    "Accept": "application/json"
+                },
+                auth=auth,
+                timeout=10
+            )
 
+            # Validation Confluence API code response 
+            if response.status_code == 200:
+                data = response.json()
+                pages.extend([{"id": page["id"], "title": page["title"]} for page in data.get("results", [])])
+                
+                # Pagination handling
+                url = BASE_URL + data["_links"].get("next", "") if "_links" in data and "next" in data["_links"] else None
+            
+            elif response.status_code == 401:
+                raise PermissionError("⚠️ Error 401: Wrong credentials or yo don't have not permissions to access Confluence API.")
+            
+            elif response.status_code == 403:
+                raise PermissionError("⚠️ Error 403: You don't have permissions to access the Confluence API.")
+            
+            elif response.status_code == 404:
+                raise FileNotFoundError("⚠️ Error 404: No pages found in Confluence.")
+            
+            else:
+                raise Exception(f"⚠️ Error {response.status_code}: {response.text}")
+
+        except requests.exceptions.Timeout:
+            print("⏳ Error: Timeout. Retrying...")
+            retries += 1
+
+        except requests.exceptions.ConnectionError:
+            print("🔌 Error: Could not connect to Confluence. Check your connection.")
+            return None
+
+        except Exception as e:
+            print(str(e))
+            return None
+    
+    print("Pages", pages)
+    return pages
 
 # get_child_pages(PARENT_CODA_DOC_PAGE_ID)
 
 if __name__ == "__main__":
     print("...Running Pages Service confluence doc")
 
+get_child_pages(PARENT_LAND_USE_CLASSIFIER_PAGE_ID)

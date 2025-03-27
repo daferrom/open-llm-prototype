@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     summary = summarize_changes(prompt)
     with open("summary.xhtml", "w") as f:
-        f.write(summary) ## Write the generated AsciiDoc documentation to a summary.adoc file
+        f.write(summary) ## Write the generated doc in xhtml
 
     print("Doc Summary en summary.xhtml")
 
