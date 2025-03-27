@@ -1,5 +1,5 @@
 {
-    "documentation_type": "Hero goes the doc type generated",
-    "justification": "Here goes the explanation of AI of the doc type selected",
-    "confidence": 0.9
+    "documentation_type": "Technical",
+    "justification": "The diff introduces a project charter that outlines detailed technical information about the system architecture, processes, methodologies, metrics, and roles related to the development and deployment of a land use classification model. It includes specifics of the modeling process, data preprocessing, hyperparameter tuning, metrics, deployment strategies, and the responsibilities of team members. This level of detail is characteristic of technical documentation.",
+    "confidence": 0.95
 }
