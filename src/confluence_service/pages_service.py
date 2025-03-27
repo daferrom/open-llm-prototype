@@ -127,7 +127,6 @@ def get_all_pages(max_retries=3):
         except Exception as e:
             print(str(e))
             return None
-
     print("Pages", pages)
     return pages
 
