@@ -148,6 +148,7 @@ def createDocumentation(title,  content_xhtml, parentPageId=None):
 
     auth = (USERNAME, API_TOKEN)
 
+    # # POST Request to create confluence page 
     response = requests.post(f"{CONFLUENCE_URL}/content", headers=headers, auth=auth, data=json.dumps(data))
 
     return response
@@ -193,7 +194,7 @@ def updateContent(contenidoXML, pageId, version,title):
         }
         auth = (USERNAME, API_TOKEN)
 
-        # # POST Request to create confluence page
+        # # POST Request to create confluence page 
         return requests.put(f"{CONFLUENCE_URL}/content/{pageId}", headers=headers, auth=auth, data=json.dumps(data))
 
     except ZeroDivisionError:
