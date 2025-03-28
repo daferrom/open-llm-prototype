@@ -63,11 +63,12 @@ def post_subpage(space_id="", title="", parent_id="", content_xhtml=""):
         print(response.text)
 
 def get_all_pages(max_retries=3):
+
     url = f"{BASE_URL}"
     print(url)
     pages = []
-    
     retries = 0
+
     while url and retries < max_retries:
         try:
             response = requests.request(
@@ -83,19 +84,19 @@ def get_all_pages(max_retries=3):
             if response.status_code == 200:
                 data = response.json()
                 pages.extend([{"id": page["id"], "title": page["title"]} for page in data.get("results", [])])
-                
+
                 # Pagination handling
                 url = BASE_URL + data["_links"].get("next", "") if "_links" in data and "next" in data["_links"] else None
-            
+
             elif response.status_code == 401:
                 raise PermissionError("⚠️ Error 401: Wrong credentials or yo don't have not permissions to access Confluence API.")
-            
+
             elif response.status_code == 403:
                 raise PermissionError("⚠️ Error 403: You don't have permissions to access the Confluence API.")
-            
+
             elif response.status_code == 404:
                 raise FileNotFoundError("⚠️ Error 404: No pages found in Confluence.")
-            
+
             else:
                 raise Exception(f"⚠️ Error {response.status_code}: {response.text}")
 
@@ -110,7 +111,7 @@ def get_all_pages(max_retries=3):
         except Exception as e:
             print(str(e))
             return None
-    
+
     print("Pages", pages)
     return pages
 
@@ -188,4 +189,4 @@ def updateContent(contenidoXML, pageId, version,title):
 if __name__ == "__main__":
     print("...Running Pages Service confluence doc")
 
-get_child_pages(PARENT_LAND_USE_CLASSIFIER_PAGE_ID)
+get_child_pages(PARENT_CODA_DOC_PAGE_ID)
