@@ -12,6 +12,7 @@ on:
       - closed
     branches:
       - main
+      - generate-technical-doc
 
 concurrency:
   group: ci-${{ github.ref }}
