@@ -23,7 +23,13 @@ API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
 # This would be the reference SPACE of the project en confluence
 SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY") ##
 SPACE_ID = "295237"
-PARENT_CODA_DOC_PAGE_ID = "5734416" # CoDa Documentation parent Page ID
+
+PAGE_PARENTS_IDS = {
+        "CODA_GENERAL_DOCUMENTATION_ID": "5734416",
+        "TECHNICAL": "12976156",
+        "INSTALLATION_AND_CONFIG": "12943396",
+    }
+
 CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api/content"
 XHTML_DOC_PATH = "summary.xhtml"
 
@@ -59,9 +65,9 @@ def publish_to_confluence(title,  content_xhtml):
 
 
 # Publish a child page in a confluence page in content
-def publish_confluence_subpage(page_title, xhtml_content):
+def publish_confluence_subpage(page_title, xhtml_content, parent_page_id):
     print("......page_title to publish", page_title)
-    post_subpage(space_id=SPACE_ID, title=page_title, parent_id=PARENT_CODA_DOC_PAGE_ID, content_xhtml=xhtml_content)
+    post_subpage(space_id=SPACE_ID, title=page_title, parent_id=parent_page_id, content_xhtml=xhtml_content)
 
 
 
@@ -89,5 +95,5 @@ title = head.find("title").string if head and head.find("title") else "No title 
 
 
 print(f".....PUBLISHING XHTML DOC {title}......")
-publish_confluence_subpage(title, xhtml_content)
+publish_confluence_subpage(title, xhtml_content , PAGE_PARENTS_IDS["TECHNICAL"])
 

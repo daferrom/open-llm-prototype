@@ -12,6 +12,7 @@ on:
       - closed
     branches:
       - main
+      - generate-technical-doc
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -53,7 +54,8 @@ jobs:
             cat diff.txt || echo " diff.txt file empty or not found"
             ls -la $GITHUB_WORKSPACE
             cat $GITHUB_WORKSPACE/diff.txt || echo "Archivo diff.txt vacío o no encontrado"
-            python src/scripts/gh_test_request.py
+            python src/doctype_diff_validator/doctype_diff_validator.py
+            python src/xhtml_generator/xhtml_generator.py
 
       - name: Create Doc page on Confluence
         env:
