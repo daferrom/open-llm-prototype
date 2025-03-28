@@ -28,7 +28,7 @@ with open("api_ai_response.json", "r", encoding="utf-8") as file:
 
 #TODO: Remove when confluence publish directs the right main DocType to publish
 # doc_type = doctype_validation["documentation_type"] # Hardcode doctype "Technical for DEMO generation"
-doc_type = "Technical" #
+doc_type = "Code" #
 
 
 print("DOC TYPE", doc_type)

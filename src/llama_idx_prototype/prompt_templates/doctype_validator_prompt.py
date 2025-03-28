@@ -1,25 +1,10 @@
-from pathlib import Path
-import sys
-import json
-import re
-
-
-# Add 'src' to sys.path for allowing utils import
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils import read_file_by_env
-
-
-from client_api_ai import client_api_ai
-
-# Load diff.txt content
-diff_content = read_file_by_env.load_diff_content("diff.txt")
-
-
-doctype_prompt_validator = f"""
+doctype_prompt_validator = {
+    
+    }f"""
     You are an expert technical writer specializing in software documentation.
     Your task is to analyze the changes in the following diff:
 
-    {diff_content}
+    `{diff_content}`
 
     Based on these changes, identify the most appropriate documentation type from the following categories:
 
@@ -42,22 +27,3 @@ doctype_prompt_validator = f"""
     "confidence": <Confidence score between 0 and 1>
     }}
     """
-
-doctype_val_response = client_api_ai.get_api_ai_response(doctype_prompt_validator)
-
-# 🔹 Delete delimiters```json ... ``` on the response
-clean_json = re.sub(r"^```json|\n```$", "", doctype_val_response).strip()
-
-# 🔹 Convert to Dictionary
-data = json.loads(clean_json)
-
-# Validates response format
-print("TYPE !!!!!", type(doctype_val_response))
-# Si la respuesta de OpenAI es un string con JSON dentro, conviértelo en un diccionario
-
-# Write the response to a JSON file
-with open("api_ai_response.json", "w", encoding="utf-8") as file:
-    json.dump(data, file, ensure_ascii=False, indent=4)
-
-# Print the response
-print("... API AI response DOC type validation per diff ✅:", json.dumps(doctype_val_response, ensure_ascii=False, indent=4))
