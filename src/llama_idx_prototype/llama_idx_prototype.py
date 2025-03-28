@@ -15,19 +15,18 @@ from llama_index.core.evaluation import FaithfulnessEvaluator
 
 import chromadb
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from phoenix.otel import register
 
 # Add 'src' to sys.path for allowing utils import
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
+from client_api_ai.prompt_templates import prompt_templates
+from utils import read_file_by_env
+
 
 from utils import env_utils
 
-# Get workspace directory
-workspace = env_utils.get_workspace()
-
-# Set diff file path
-diff_file_path = workspace / "diff.txt"
+# Load diff.txt content
+diff_content_loaded = read_file_by_env.load_diff_content("diff.txt")
 
 # Load .env only on local execution
 env_utils.load_env_if_local()
@@ -114,12 +113,13 @@ llm = HuggingFaceInferenceAPI(
 # FaithfulnessEvaluator
 evaluator = FaithfulnessEvaluator(llm=llm)
 
+print("MY DIFF CONTENT", diff_content_loaded)
 
 query_engine = index.as_query_engine(
     llm=llm,
     response_mode="tree_summarize",
 )
-response = query_engine.query("How Can I made the installation and config of the open llm?")
+response = query_engine.query(prompt_templates["DOCTYPE_PROMPT_VALIDATOR"].format(diff_content=diff_content_loaded))
 
 print(" 😎😎😎😎😎 response 😎😎😎😎😎", response) # Response must be The setup Instructions of Coda
 
@@ -135,11 +135,4 @@ eval_result.passing
 
 
 
-# TODO: 
-# FOR DEMO BY Jhonathan 
-# COMPLETE THE WORKFLOW VALIDATION AND CREATE
-# INTEGRATE UPDATE
 
-# NOT FOR DEMO BY DIEGO
-#   ORGANIZE DOCS ON CONFLUENCE ON THIS RPOJECT IN THE DOCTYPES MAIN PAGES WITH THEIR SECTIONS
-#  LOAD THOSE DOCUMENTS using LLama HUb to LOading from Confluence Directly 

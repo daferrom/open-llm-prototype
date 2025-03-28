@@ -22,6 +22,7 @@ SPACE_ID = "295237"
 
 PAGE_PARENTS_IDS = {
         "CODA_GENERAL_DOCUMENTATION_ID": "5734416",
+        "CODE": "12910597",
         "TECHNICAL": "12976156",
         "INSTALLATION_AND_CONFIG": "12943396",
     }
@@ -67,5 +68,5 @@ title = head.find("title").string if head and head.find("title") else "No title 
 
 
 print(f".....PUBLISHING XHTML DOC {title}......")
-publish_confluence_subpage(title, xhtml_content , PAGE_PARENTS_IDS["TECHNICAL"])
+publish_confluence_subpage(title, xhtml_content , PAGE_PARENTS_IDS["CODE"])
 
