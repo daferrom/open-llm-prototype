@@ -43,7 +43,7 @@ def publish_to_confluence(title,  content_xhtml):
 # Publish a child page in a confluence page in content
 def publish_confluence_subpage(page_title, xhtml_content, parent_page_id):
     print("......page_title to publish", page_title)
-    pages_service.post_subpage(space_id=SPACE_ID, title=page_title, parent_id=PARENT_CODA_DOC_PAGE_ID, content_xhtml=xhtml_content)
+    pages_service.post_subpage(space_id=SPACE_ID, title=page_title, parent_id=parent_page_id, content_xhtml=xhtml_content)
 
 # publish_to_confluence("Change diff_content handling", XHTML_DOC_TO_PUBLISH)
 
