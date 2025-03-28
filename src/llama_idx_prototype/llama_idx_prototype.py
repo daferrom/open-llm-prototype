@@ -102,6 +102,7 @@ if __name__ == "__main__":
     BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki"
     MODEL_NAME= "Qwen/Qwen2.5-Coder-32B-Instruct"
 
+    print("MY DIFF CONTENT", diff_content_loaded)
 
     set_tracer_phoenix_config()
 
