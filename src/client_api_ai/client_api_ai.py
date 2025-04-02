@@ -26,7 +26,8 @@ client = OpenAI(
 )
 
 def get_api_ai_response(prompt):
-    print("***...🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖 Requesting response to API AI 🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖...***")
+    MODEL="gpt-4o"
+    print(f"***...🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖 Requesting response to API AI , model {MODEL} 🤖🤖🤖🤖🤖🤖🤖🤖🤖🤖...***")
 
     response = client.chat.completions.create(
         messages=[
@@ -39,7 +40,7 @@ def get_api_ai_response(prompt):
                 "content": prompt
             }
         ],
-        model="gpt-4o",
+        model=MODEL,
         temperature=1,
         max_tokens=4096,
         top_p=1
