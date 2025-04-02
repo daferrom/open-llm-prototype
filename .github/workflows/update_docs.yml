@@ -54,7 +54,7 @@ jobs:
             ls -la $GITHUB_WORKSPACE
             cat $GITHUB_WORKSPACE/diff.txt || echo "Archivo diff.txt vacío o no encontrado"
             python src/doctype_diff_validator/doctype_diff_validator.py
-            python src/xhtml_generator/xhtml_generator.py
+            python src/docs_publisher_controller/gen_doc_controller.py.py
 
       - name: Create Doc page on Confluence
         env:
