@@ -149,7 +149,7 @@ if  __name__ == "__main__":
 
 
     print(f"XHTML Documentation by DOC TYPE {DOC_TYPES[doc_type_id]} : ", xhtml_documentation)
-    
+
     publish_doc_to_confluence(action, xhtml_documentation, page_id, page_title, doc_type_id , xhtml_doc_version)
     # # Publicar en Confluence
     # status = publish_to_confluence(documentation, action, page_id)
