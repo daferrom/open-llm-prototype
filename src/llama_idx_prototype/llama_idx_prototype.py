@@ -95,7 +95,7 @@ if __name__ == "__main__":
     env_utils.load_env_if_local()
 
     HF_API_TOKEN = os.getenv("MY_HF_TOKEN")
-    CONFLUENCE_READER_TOKEN= os.getenv("CONFLUENCE_READER_TOKEN")
+    CONFLUENCE_READER_TOKEN= os.getenv("CONFLUENCE_TOKEN_3")
     USER = os.getenv("MY_EMAIL")
     SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
     OPENAI_API_KEY = os.getenv("GH_GPT4_API_KEY")
