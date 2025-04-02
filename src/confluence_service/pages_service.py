@@ -1,8 +1,15 @@
 import requests
 from requests.auth import HTTPBasicAuth
+import sys
+from pathlib import Path
 import os
 import json
 from dotenv import load_dotenv
+
+# Add 'src' to sys.path for allowing utils import
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from config.config import PARENT_CODA_DOC_PAGE_ID # CoDa Documentation parent Page ID
+
 
 
 # Load env variables from .env
@@ -16,7 +23,6 @@ CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api"
 BASE_URL =       "https://nisum-team-aqnn9b9c.atlassian.net/wiki/api/v2/pages"
 USERNAME = os.getenv("MY_EMAIL")
 API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
-PARENT_CODA_DOC_PAGE_ID = "5734416" # CoDa Documentation parent Page ID
 SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
 
 auth= HTTPBasicAuth(USERNAME, API_TOKEN)
@@ -25,6 +31,18 @@ headers = {
     "Accept": "application/json",
     "Content-Type": "application/json"
 }
+
+def get_page_content_by_id(page_id):
+    response = requests.request(
+        "GET",
+        url= f"{BASE_URL}/{page_id}?body-format=storage",
+        headers=headers,
+        auth=auth,
+    )
+
+    response = json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
+    print("get_page_content_by_id response: ", response)
+    return response
 
 def get_child_pages(parent_page_id):
     response = requests.request(
@@ -35,8 +53,6 @@ def get_child_pages(parent_page_id):
         timeout=10
     )
     response_data = json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
-    print(response_data)
-
     return response_data
 
 def post_subpage(space_id="", title="", parent_id="", content_xhtml=""):
@@ -132,7 +148,6 @@ def createDocumentation(title,  content_xhtml, parentPageId=None):
 
     auth = (USERNAME, API_TOKEN)
 
-    # # POST Request to create confluence page 
     response = requests.post(f"{CONFLUENCE_URL}/content", headers=headers, auth=auth, data=json.dumps(data))
 
     return response
@@ -178,15 +193,61 @@ def updateContent(contenidoXML, pageId, version,title):
         }
         auth = (USERNAME, API_TOKEN)
 
-        # # POST Request to create confluence page 
+        # # POST Request to create confluence page
         return requests.put(f"{CONFLUENCE_URL}/content/{pageId}", headers=headers, auth=auth, data=json.dumps(data))
 
     except ZeroDivisionError:
         print("❌ Error upon UpdateContent")
 
-# get_child_pages(PARENT_CODA_DOC_PAGE_ID)
+def update_page_content_by_id(xhtml_content, page_id, title, version=1):
+    
+    payload = json.dumps({
+        "id": page_id,
+        "status": "current",
+        "title": title,
+        "body": {
+            "representation": "storage",
+            "value": xhtml_content
+        },
+        "version": {
+            "number": version,
+            "message": "Test message update"
+        }
+    })
+    try:
+        response = requests.request(
+            "PUT",
+            url=f"{BASE_URL}/{page_id}",
+            data=payload,
+            headers=headers,
+            auth=auth
+        )
+        if response.status_code == 200:
+            print(f"✅ Page updated successfully!")
+            print("🔗 PAGE URL:", response.json().get("_links", {}).get("base") + response.json().get("_links", {}).get("webui"))
+            return response
+        elif response.status_code == 401:
+            print("⚠️ Error 401: Authentication failed")
+            return None
+        elif response.status_code == 403:
+            print("⚠️ Error 403: Insufficient permissions")
+            return None
+        elif response.status_code == 404:
+            print("⚠️ Error 404: Page not found")
+            return None
+        else:
+            print(f"⚠️ Error {response.status_code}: {response.text}")
+            return None
+    except requests.exceptions.Timeout:
+        print("⚠️ Request timed out")
+        return None
+    except requests.exceptions.ConnectionError:
+        print("⚠️ Connection error")
+        return None
+    except Exception as e:
+        print(f"⚠️ Unexpected error: {str(e)}")
+        return None
+
 
 if __name__ == "__main__":
     print("...Running Pages Service confluence doc")
-
-get_child_pages(PARENT_CODA_DOC_PAGE_ID)
