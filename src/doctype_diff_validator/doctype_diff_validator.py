@@ -14,6 +14,7 @@ from client_api_ai import client_api_ai
 # Load diff.txt content
 diff_content = read_file_by_env.load_diff_content("diff.txt")
 
+# TODO: PLace prompt in prompt_templates.py
 
 doctype_prompt_validator = f"""
     As a specialized documentation analyzer, evaluate the following code diff 

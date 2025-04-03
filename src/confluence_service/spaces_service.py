@@ -95,8 +95,5 @@ def get_child_pages():
     url = f"{BASE_URL}"
     
 
-
-
-#   Get all confluence spaces of a user
-# get_spaces()
-get_all_pages_in_space(295237)
+if __name__ == "__main__":
+    print("...Running Spaces Service confluence doc")
