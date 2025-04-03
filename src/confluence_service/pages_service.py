@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 # Add 'src' to sys.path for allowing utils import
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from config.config import PARENT_CODA_DOC_PAGE_ID # CoDa Documentation parent Page ID
+from config.config import PARENT_CODA_DOC_PAGE_ID, SPACE_ID, PAGE_PARENTS_IDS
 
 
 
@@ -55,9 +55,9 @@ def get_child_pages(parent_page_id):
     response_data = json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
     return response_data
 
-def post_subpage(space_id="", title="Doc default title", parent_id="", content_xhtml=""):
+def post_subpage(space_id, title , parent_id, content_xhtml):
     # Set data Sub-Page payload
-    payload = json.dumps({
+    payload = {
         "spaceId": space_id,
         "status": "current",
         "title": title,
@@ -65,11 +65,12 @@ def post_subpage(space_id="", title="Doc default title", parent_id="", content_x
         "body": {
             "representation": "storage",
             "value": content_xhtml
-    }})
-    print("🚀 Posting Sub-Page to Confluence with your payload")
+    }}
+    
+    print("🚀 Posting Sub-Page to Confluence with your payload :", payload)
 
     ## POST request to create sub-page
-    response = requests.post(BASE_URL, headers=headers, auth=auth, data=payload)
+    response = requests.post(BASE_URL, headers=headers, auth=auth, data=json.dumps(payload))
 
     if response.status_code in [200, 201]:
         print(f"✅ Sub-Page created successfully on space!")
