@@ -55,9 +55,9 @@ def get_child_pages(parent_page_id):
     response_data = json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
     return response_data
 
-def post_subpage(space_id, title , parent_id, content_xhtml):
+def post_subpage(space_id, title, parent_id, content_xhtml):
     # Set data Sub-Page payload
-    payload = {
+    payload = json.dumps({
         "spaceId": space_id,
         "status": "current",
         "title": title,
@@ -65,19 +65,43 @@ def post_subpage(space_id, title , parent_id, content_xhtml):
         "body": {
             "representation": "storage",
             "value": content_xhtml
-    }}
+        }
+    })
     
-    print("🚀 Posting Sub-Page to Confluence with your payload :", payload)
+    print("🚀 Posting Sub-Page to Confluence with your payload:", payload)
 
-    ## POST request to create sub-page
-    response = requests.post(BASE_URL, headers=headers, auth=auth, data=json.dumps(payload))
+    # Validate parent page existence
+    parent_check = requests.get(f"{BASE_URL}/{parent_id}", headers=headers, auth=auth)
+    if parent_check.status_code != 200:
+        print(f"❌ Parent page not found or inaccessible: {parent_check.status_code}")
+        print(parent_check.text)
+        return None
 
-    if response.status_code in [200, 201]:
-        print(f"✅ Sub-Page created successfully on space!")
-        print("🔗 PAGE URL:", response.json().get("_links", {}).get("base") + response.json().get("_links", {}).get("webui"))
-    else:
-        print("❌ Error creating the Sub-Page:", response.status_code)
-        print(response.text)
+    try:
+        response = requests.post(
+            BASE_URL,
+            headers=headers,
+            auth=auth,
+            data=payload,
+            timeout=10
+***REMOVED***
+        
+        if response.status_code in [200, 201]:
+            print(f"✅ Sub-Page created successfully on space!")
+            page_url = response.json().get("_links", {}).get("base", "") + response.json().get("_links", {}).get("webui", "")
+            print("🔗 PAGE URL:", page_url)
+            return response
+        else:
+            print(f"❌ Error creating the Sub-Page: {response.status_code}")
+            print(f"Response: {response.text}")
+            return None
+
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Request error: {str(e)}")
+        return None
+    except Exception as e:
+        print(f"❌ Unexpected error: {str(e)}")
+        return None
 
 def get_all_pages(max_retries=3):
 
