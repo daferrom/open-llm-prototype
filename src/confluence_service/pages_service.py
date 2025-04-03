@@ -16,11 +16,10 @@ from config.config import PARENT_CODA_DOC_PAGE_ID, SPACE_ID, PAGE_PARENTS_IDS
 if os.getenv("GITHUB_ACTIONS") is None:
     print("...Running Pages Service confluence doc from local")
     load_dotenv()
-    
-    
+
 # Configuration
 CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api"
-BASE_URL =       "https://nisum-team-aqnn9b9c.atlassian.net/wiki/api/v2/pages"
+BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/api/v2/pages"
 USERNAME = os.getenv("MY_EMAIL")
 API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
 SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
@@ -71,21 +70,25 @@ def post_subpage(space_id, title, parent_id, content_xhtml):
     print("🚀 Posting Sub-Page to Confluence with your payload:", payload)
 
     # Validate parent page existence
-    parent_check = requests.get(f"{BASE_URL}/{parent_id}", headers=headers, auth=auth)
+    parent_page_url = f"{BASE_URL}/{parent_id}"
+    print("Parent check url: ", parent_page_url)
+    parent_check = requests.get(parent_page_url, headers=headers, auth=auth)
+    
     if parent_check.status_code != 200:
         print(f"❌ Parent page not found or inaccessible: {parent_check.status_code}")
         print(parent_check.text)
         return None
 
+    post_base_url = BASE_URL
+    print("post_base_url", post_base_url)
     try:
         response = requests.post(
-            BASE_URL,
+            post_base_url,
             headers=headers,
             auth=auth,
             data=payload,
             timeout=10
 ***REMOVED***
-        
         if response.status_code in [200, 201]:
             print(f"✅ Sub-Page created successfully on space!")
             page_url = response.json().get("_links", {}).get("base", "") + response.json().get("_links", {}).get("webui", "")
