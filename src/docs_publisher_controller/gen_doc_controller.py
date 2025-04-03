@@ -92,20 +92,28 @@ def generate_documentation(changes, action , doc_type_id , page_id):
 
         return get_api_ai_response(update_doc_prompt) , doc_version , page_title
     else:
-        return get_api_ai_response(prompt_templates[doc_type_key_prompt].format(diff_content=changes)), doc_version , None
+        return get_api_ai_response(prompt_templates[doc_type_key_prompt].format(diff_content=changes)), doc_version , "New Page default title"
 
-def publish_doc_to_confluence(action, documentation, page_id, page_title,  doc_type_id ,doc_version=1):
+def publish_doc_to_confluence(action, documentation, page_id, page_title, doc_type_id, doc_version=1):
     if action == "update":
         update_page_content_by_id(xhtml_content=documentation, page_id=page_id, title=page_title, version=doc_version)
     else: # when action is "create" or not action defined
-        with open(XHTML_DOC_PATH, "r", encoding="utf-8") as file:
-            xhtml_content = file.read()
-        soup = BeautifulSoup(xhtml_content, "lxml-xml")  # Use "lxml-xml" for valid XHTML
-        # Look for the <head> and then the <title>
-        head = soup.find("head")
-        title = head.find("title").string if head and head.find("title") else "No title found"
-        post_subpage(space_id=SPACE_ID, title=title, parent_id=PAGE_PARENTS_IDS[doc_type_id], content_xhtml=documentation)
+        try:
+            soup = BeautifulSoup(documentation, "xml")  # Try with xml parser first
+            title_tag = soup.find("title")
+            title = title_tag.text if title_tag else page_title
+        except:
+            try:
+                # Fallback to lxml parser
+                soup = BeautifulSoup(documentation, "lxml")
+                title_tag = soup.find("title") 
+                title = title_tag.text if title_tag else page_title
+            except:
+                # If all parsing fails, use default title
+                title = page_title
 
+        print(f".....PUBLISHING XHTML DOC TO CONFLUENCE WITH TITLE: {title}......")
+        post_subpage(space_id=SPACE_ID, title=title, parent_id=PAGE_PARENTS_IDS[doc_type_id], content_xhtml=documentation)
 
 if  __name__ == "__main__":
     print("...create_idx_by_doctype")
