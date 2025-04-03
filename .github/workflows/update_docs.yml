@@ -36,6 +36,9 @@ jobs:
         with:
           python-version: "3.9"
 
+      - name: Enable Debugging
+        run: echo "DEBUG=true" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: |
             python -m pip install --upgrade pip
@@ -50,6 +53,7 @@ jobs:
               CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
               CONFLUENCE_SPACE_KEY: ${{ secrets.CONFLUENCE_SPACE_KEY }}
               HF_API_TOKEN: ${{ secrets.MY_HF_TOKEN }}
+              SPACE_ID: "295237"
         run: |
             python src/scripts/get_diff.py
             ls -la
