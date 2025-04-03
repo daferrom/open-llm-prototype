@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 # Add 'src' to sys.path for allowing utils import
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from config.config import PARENT_CODA_DOC_PAGE_ID, SPACE_ID, PAGE_PARENTS_IDS
+
 
 
 
@@ -55,6 +55,9 @@ def get_child_pages(parent_page_id):
     return response_data
 
 def post_subpage(space_id, title, parent_id, content_xhtml):
+    # Convert parent_id to string
+    parent_id = str(parent_id)
+
     # Set data Sub-Page payload
     payload = json.dumps({
         "spaceId": space_id,
@@ -70,17 +73,17 @@ def post_subpage(space_id, title, parent_id, content_xhtml):
     print("🚀 Posting Sub-Page to Confluence with your payload:", payload)
 
     # Validate parent page existence
-    parent_page_url = f"{BASE_URL}/{parent_id}"
-    print("Parent check url: ", parent_page_url)
-    parent_check = requests.get(parent_page_url, headers=headers, auth=auth)
-    
+    parent_check_url = f"{BASE_URL}/{parent_id}"
+    print(f"Parent check URL: {parent_check_url}")
+    parent_check = requests.get(parent_check_url, headers=headers, auth=auth)
+    post_base_url = BASE_URL
+    print("post_base_url", post_base_url)
+
     if parent_check.status_code != 200:
         print(f"❌ Parent page not found or inaccessible: {parent_check.status_code}")
         print(parent_check.text)
         return None
 
-    post_base_url = BASE_URL
-    print("post_base_url", post_base_url)
     try:
         response = requests.post(
             post_base_url,
