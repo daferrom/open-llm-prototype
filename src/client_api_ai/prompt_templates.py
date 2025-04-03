@@ -411,5 +411,33 @@ prompt_templates = {
         </body>
         </html>
         ```
-        """
+        """,
+    "DOCTYPE_PROMPT_VALIDATOR":    """
+        As a specialized documentation analyzer, evaluate the following code diff 
+        to determine its primary documentation category:
+
+        `{diff_content}`
+
+        Documentation Categories:
+        1. CODE         - In-code documentation (comments, docstrings)
+        2. API          - Function/method/endpoint usage guides
+        3. TECHNICAL    - System architecture and design documentation
+        4. USER         - End-user guides and tutorials
+        5. SETUP        - Installation and configuration instructions
+        6. TESTING      - Test documentation and QA processes
+        7. PROCESS      - Development workflows and standards
+
+        Requirements:
+        - Choose ONE primary category that best matches the diff
+        - Consider the context and scope of changes
+        - Base your decision on concrete evidence from the diff
+
+        Respond in JSON format:
+        {{
+            "documentation_type": "<category_name>",
+            "id": "<1-7>",
+            "justification": "<specific_evidence_from_diff>",
+            "confidence": <0.0-1.0>
+        }}
+    """
 }
