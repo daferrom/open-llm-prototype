@@ -98,7 +98,9 @@ def publish_doc_to_confluence(action, documentation, page_id, page_title,  doc_t
     if action == "update":
         update_page_content_by_id(xhtml_content=documentation, page_id=page_id, title=page_title, version=doc_version)
     else: # when action is "create" or not action defined
-        soup = BeautifulSoup(documentation, "lxml-xml")  # Use "lxml-xml" for valid XHTML
+        with open(XHTML_DOC_PATH, "r", encoding="utf-8") as file:
+            xhtml_content = file.read()
+        soup = BeautifulSoup(xhtml_content, "lxml-xml")  # Use "lxml-xml" for valid XHTML
         # Look for the <head> and then the <title>
         head = soup.find("head")
         title = head.find("title").string if head and head.find("title") else "No title found"
@@ -114,6 +116,7 @@ if  __name__ == "__main__":
     HF_API_TOKEN = os.getenv("MY_HF_TOKEN")
     MODEL_NAME= "Qwen/Qwen2.5-Coder-32B-Instruct"
     MODEL_FOR_EMBEDD = "BAAI/bge-small-en-v1.5"
+    XHTML_DOC_PATH = "summary.xhtml"
 
     # Get workspace directory
     workspace = env_utils.get_workspace()
