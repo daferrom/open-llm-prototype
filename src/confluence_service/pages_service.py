@@ -55,7 +55,7 @@ def get_child_pages(parent_page_id):
     response_data = json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
     return response_data
 
-def post_subpage(space_id="", title="", parent_id="", content_xhtml=""):
+def post_subpage(space_id="", title="Doc default title", parent_id="", content_xhtml=""):
     # Set data Sub-Page payload
     payload = json.dumps({
         "spaceId": space_id,
