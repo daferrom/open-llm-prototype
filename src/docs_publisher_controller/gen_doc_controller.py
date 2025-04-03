@@ -113,6 +113,7 @@ def publish_doc_to_confluence(action, documentation, page_id, page_title, doc_ty
                 title = page_title
 
         print(f".....PUBLISHING XHTML DOC {PAGE_PARENTS_IDS[doc_type_id]} TO CONFLUENCE WITH TITLE: {title} with doc_type_id: {doc_type_id}......")
+        print("PAGE_PARENTS_IDS[doc_type_id] variable type: ", type(PAGE_PARENTS_IDS[doc_type_id]))
         post_subpage(space_id=SPACE_ID, title=title, parent_id=PAGE_PARENTS_IDS[doc_type_id], content_xhtml=documentation)
 
 if  __name__ == "__main__":
