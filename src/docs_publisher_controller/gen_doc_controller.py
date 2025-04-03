@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 # Add 'src' to sys.path for allowing utils import
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from config.config import PARENT_CODA_DOC_PAGE_ID , PAGE_PARENTS_IDS , DOC_TYPES , SPACE_ID # CoDa DOCUMENTATION / parent Page ID
+from config.config import PARENT_CODA_DOC_PAGE_ID , PAGE_PARENTS_IDS , DOC_TYPES # CoDa DOCUMENTATION / parent Page ID
 from confluence_service.pages_service import get_child_pages ,get_page_content_by_id , update_page_content_by_id,  post_subpage
 from utils.access_files_util import read_file_as_json
 from llama_idx_prototype.llama_idx_prototype import set_index , set_llm_config, get_llama_idx_query
@@ -94,10 +94,10 @@ def generate_documentation(changes, action , doc_type_id , page_id):
     else:
         return get_api_ai_response(prompt_templates[doc_type_key_prompt].format(diff_content=changes)), doc_version , "New Page default title"
 
-def publish_doc_to_confluence(action, documentation, page_id, page_title, doc_type_id, doc_version=1):
+def publish_doc_to_confluence(space_id, action, documentation, page_id, page_title, doc_type_id, doc_version=1):
     if action == "update":
         update_page_content_by_id(xhtml_content=documentation, page_id=page_id, title=page_title, version=doc_version)
-    else: # when action is "create" or not action defined
+    else:  # when action is "create" or not action defined
         try:
             soup = BeautifulSoup(documentation, "xml")  # Try with xml parser first
             title_tag = soup.find("title")
@@ -106,15 +106,16 @@ def publish_doc_to_confluence(action, documentation, page_id, page_title, doc_ty
             try:
                 # Fallback to lxml parser
                 soup = BeautifulSoup(documentation, "lxml")
-                title_tag = soup.find("title") 
+                title_tag = soup.find("title")
                 title = title_tag.text if title_tag else page_title
             except:
                 # If all parsing fails, use default title
                 title = page_title
 
-        print(f".....PUBLISHING XHTML DOC {PAGE_PARENTS_IDS[doc_type_id]} TO CONFLUENCE WITH TITLE: {title} with doc_type_id: {doc_type_id}......")
-        print("PAGE_PARENTS_IDS[doc_type_id] variable type: ", type(PAGE_PARENTS_IDS[doc_type_id]))
-        post_subpage(space_id=SPACE_ID, title=title, parent_id=PAGE_PARENTS_IDS[doc_type_id], content_xhtml=documentation)
+        print(f"DEBUG: Publishing to Confluence with SPACE_ID={SPACE_ID}, Parent ID={PAGE_PARENTS_IDS[doc_type_id]}")
+        print(f"DEBUG: Title={title}, Doc Type ID={doc_type_id}, Documentation Length={len(documentation)}")
+
+        post_subpage(space_id=space_id, title=title, parent_id=PAGE_PARENTS_IDS[doc_type_id], content_xhtml=documentation)
 
 if  __name__ == "__main__":
     print("...create_idx_by_doctype")
@@ -126,6 +127,7 @@ if  __name__ == "__main__":
     MODEL_NAME= "Qwen/Qwen2.5-Coder-32B-Instruct"
     MODEL_FOR_EMBEDD = "BAAI/bge-small-en-v1.5"
     XHTML_DOC_PATH = "summary.xhtml"
+    SPACE_ID = "295237"
 
     # Get workspace directory
     workspace = env_utils.get_workspace()
@@ -162,7 +164,7 @@ if  __name__ == "__main__":
 
     print(f"XHTML Documentation by DOC TYPE {DOC_TYPES[doc_type_id]} : ", xhtml_documentation)
 
-    publish_doc_to_confluence(action, xhtml_documentation, page_id, page_title, doc_type_id , xhtml_doc_version)
+    publish_doc_to_confluence(SPACE_ID, action, xhtml_documentation, page_id, page_title, doc_type_id , xhtml_doc_version)
     # # Publicar en Confluence
     # status = publish_to_confluence(documentation, action, page_id)
 
