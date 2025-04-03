@@ -75,9 +75,11 @@ def post_subpage(space_id, title, parent_id, content_xhtml):
     # Validate parent page existence
     parent_check_url = f"{BASE_URL}/{parent_id}"
     print(f"Parent check URL: {parent_check_url}")
-    parent_check = requests.get(parent_check_url, headers=headers, auth=auth)
     post_base_url = BASE_URL
     print("post_base_url", post_base_url)
+    
+    parent_check = requests.get(parent_check_url, headers=headers, auth=auth)
+    
 
     if parent_check.status_code != 200:
         print(f"❌ Parent page not found or inaccessible: {parent_check.status_code}")
