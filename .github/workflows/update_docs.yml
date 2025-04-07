@@ -44,7 +44,19 @@ jobs:
       - name: Debug Git History
         run: git log --oneline -3
 
-      - name: Generate last changes diff file and Generate documentation using GPT4 model
+      - name: Generate last changes diff file
+        run: |
+              python src/scripts/get_diff.py
+
+      - name: Load Documents
+        env:
+            CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+            MY_EMAIL: ${{ secrets.MY_EMAIL }}
+            PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
+        run: |
+              python src/docs_loader/confluence_docs_loader.py
+
+      - name: Validate documentation type with llama_index
         env:
               GH_GPT4_API_KEY: ${{ secrets.GH_GPT4_API_KEY }}
               CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
@@ -54,10 +66,20 @@ jobs:
               MY_EMAIL: ${{ secrets.MY_EMAIL }}
               PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
         run: |
-            python src/scripts/get_diff.py
             ls -la
             cat diff.txt || echo " diff.txt file empty or not found"
             ls -la $GITHUB_WORKSPACE
             cat $GITHUB_WORKSPACE/diff.txt || echo "Archivo diff.txt vacío o no encontrado"
-            python src/doctype_diff_validator/doctype_diff_validator.py
+            python src/doctype_diff_validator/doc_type_diff_validator_llama_idx.py
+
+      - name: Create/Update documentation using GPT4 model
+        env:
+              GH_GPT4_API_KEY: ${{ secrets.GH_GPT4_API_KEY }}
+              CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+              CONFLUENCE_SPACE_KEY: ${{ secrets.CONFLUENCE_SPACE_KEY }}
+              CONFLUENCE_TOKEN_3: ${{ secrets.CONFLUENCE_TOKEN_3 }}
+              HF_API_TOKEN: ${{ secrets.MY_HF_TOKEN }}
+              MY_EMAIL: ${{ secrets.MY_EMAIL }}
+              PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
+        run: |
             python src/docs_publisher_controller/gen_doc_controller.py
