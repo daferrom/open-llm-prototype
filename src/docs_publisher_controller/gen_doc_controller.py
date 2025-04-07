@@ -27,7 +27,7 @@ def search_existing_docs(index, changes, llm):
     )
 
     response = retriever.retrieve(changes)
-    print("------------ retrieved response ------------", response, "-----------------------------")
+    print(f" \n ---------------- retrieved response --------------------: \n {response}  \n -----------------------------  \n")
     return response
 
 
@@ -43,13 +43,13 @@ def decide_action(index, changes, llm):
     top_result = response[0]  # `NodeWithScore` object
     similarity_score = top_result.score  # `.score` almacena la similitud
 
-    if similarity_score > 0.8: # Hardcoded on 0.59 for testing update flow purposes 
+    if similarity_score > 0.75:
         metadata = top_result.node.metadata  # Access node metadata
         page_id = metadata.get("page_id")
         print("🔄 Updating page:", page_id)
         return "update", page_id
     else:
-        print("⚠️ Similarity too low (≤ 0.8). No updates will be made.")
+        print(f"⚠️ Similarity too low {similarity_score} (≤ 0.8). No updates will be made. A new page will be created.")
         return "create", None  # A new page is created
 
 
