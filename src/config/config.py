@@ -22,3 +22,9 @@ DOC_TYPES = {
         "6": "Testing",
         "7": "Development Process",
     }
+
+CONFLUENCE_API_BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki"
+
+CONFLUENCE_SPACE_KEY="~7120208ad1e699b38643e5ac9b38b6b02e26f2"
+
+MODEL_FOR_EMBEDDINGS = "BAAI/bge-small-en-v1.5" # Model for embeddings
