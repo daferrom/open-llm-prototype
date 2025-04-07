@@ -40,9 +40,10 @@ This project automates the process of detecting code changes in a GitHub reposit
 
 ```
 src/
-├── client_api_ai/          # LLM client configurations
+├── client_api_ai/          # LLM client configurations and prompt templates
 ├── config/                 # Application configuration
 ├── confluence_service/     # Confluence API integration
+├── docs_loader/            # Documents loaders
 ├── docs_publisher_controller/  # Documentation publishing logic
 ├── doctype_diff_validator/    # Change type classification
 ├── llama_idx_prototype/       # LlamaIndex integration
@@ -91,12 +92,7 @@ Always use squash merging to maintain clean git history.
 
 2. **Validate documentation type:**
    ```sh
-   python src/doctype_diff_validator/doctype_diff_validator.py
-   ```
-
-3. **Generate XHTML documentation:**
-   ```sh
-   python src/xhtml_generator/xhtml_generator.py
+   python src/doctype_diff_validator/doc_type_diff_validator_llama_idx.py
    ```
 
 4. **Update Confluence:**
