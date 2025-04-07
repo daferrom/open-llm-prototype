@@ -19,10 +19,14 @@ if os.getenv("GITHUB_ACTIONS") is None:
 
 # Configuration
 CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api"
-BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/api/v2/pages"
-USERNAME = os.getenv("MY_EMAIL")
-API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
+BASE_DOMAIN = "https://nisum-team-aqnn9b9c.atlassian.net"
+CONFLUENCE_API_V2 = "/wiki/api/v2"
+BASE_URL = f"{BASE_DOMAIN}{CONFLUENCE_API_V2}/pages"
+
 SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
+
+USERNAME = os.getenv("MY_EMAIL")
+API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN_4")
 
 auth= HTTPBasicAuth(USERNAME, API_TOKEN)
 
@@ -52,6 +56,7 @@ def get_child_pages(parent_page_id):
         timeout=10
     )
     response_data = json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
+    print("get_child_pages response: ", response_data)    
     return response_data
 
 def post_subpage(space_id, title, parent_id, content_xhtml):
@@ -111,53 +116,56 @@ def post_subpage(space_id, title, parent_id, content_xhtml):
         print(f"❌ Unexpected error: {str(e)}")
         return None
 
-def get_all_pages(max_retries=3):
+def get_all_pages():
+    
+    my_headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+        }
+    # Debug logs for credential verification (without revealing actual values)
+    # print(f"Username present: {USERNAME is not None and USERNAME != ''}" )
+    # print(f"API token present: {API_TOKEN is not None and API_TOKEN != ''}")
+
+    
 
     url = f"{BASE_URL}"
     print(url)
     pages = []
     retries = 0
 
-    while url and retries < max_retries:
-        try:
-            response = requests.request(
-                "GET",
-                url,
-                headers={
-                    "Accept": "application/json"
-                },
-                auth=auth,
-                timeout=10
-            )
-                    # Validation Confluence API code response 
-            if response.status_code == 200:
-                data = response.json()
-                pages.extend([{"id": page["id"], "title": page["title"]} for page in data.get("results", [])])
 
-                # Pagination handling
-                url = BASE_URL + data["_links"].get("next", "") if "_links" in data and "next" in data["_links"] else None
 
-            elif response.status_code == 401:
-                raise PermissionError("⚠️ Error 401: Wrong credentials or yo don't have not permissions to access Confluence API.")
+    try:
+        response = requests.get(url=url, headers=my_headers, auth=auth)
+            # Validation Confluence API code response
+        if response.status_code == 200:
+            data = response.json()
+            pages.extend([{"id": page["id"], "title": page["title"], "version": page["version"]["number"]} for page in data.get("results", [])])
 
-            elif response.status_code == 403:
-                raise PermissionError("⚠️ Error 403: You don't have permissions to access the Confluence API.")
+            # Pagination handling
+            url = BASE_URL + data["_links"].get("next", "") if "_links" in data and "next" in data["_links"] else None
 
-            elif response.status_code == 404:
-                raise FileNotFoundError("⚠️ Error 404: No pages found in Confluence.")
+        elif response.status_code == 401:
+            raise PermissionError("⚠️ Error 401: Wrong credentials or yo don't have not permissions to access Confluence API.")
 
-            else:
-                raise Exception(f"⚠️ Error {response.status_code}: {response.text}")
+        elif response.status_code == 403:
+            raise PermissionError("⚠️ Error 403: You don't have permissions to access the Confluence API.")
 
-        except requests.exceptions.Timeout:
+        elif response.status_code == 404:
+            raise FileNotFoundError("⚠️ Error 404: No pages found in Confluence.")
+
+        else:
+            raise Exception(f"⚠️ Error {response.status_code}: {response.text}")
+
+    except requests.exceptions.Timeout:
             print("⏳ Error: Timeout. Retrying...")
             retries += 1
 
-        except requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError:
             print("🔌 Error: Could not connect to Confluence. Check your connection.")
             return None
 
-        except Exception as e:
+    except Exception as e:
             print(str(e))
             return None
     print("Pages", pages)

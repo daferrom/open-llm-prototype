@@ -11,8 +11,8 @@ from llama_index.core import VectorStoreIndex
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from client_api_ai.prompt_templates import prompt_templates
 from client_api_ai import client_api_ai
-from llama_idx_prototype.llama_idx_prototype import get_llama_idx_query ,set_vector_store, set_llm_config, set_tracer_phoenix_config
-
+from llama_idx_prototype.llama_idx_prototype import get_llama_idx_query, set_llm_config, set_tracer_phoenix_config
+from docs_loader.confluence_docs_loader import set_vector_store
 
 from utils import env_utils , access_files_util, response_processors
 
