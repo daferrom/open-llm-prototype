@@ -36,6 +36,8 @@ This project automates the process of detecting code changes in a GitHub reposit
 - **Languages**: Python
 - **Observability**: Phoenix/OpenTelemetry
 
+
+
 ## Project Structure
 
 ```
@@ -44,20 +46,24 @@ src/
 ├── config/                 # Application configuration
 ├── confluence_service/     # Confluence API integration
 ├── docs_loader/            # Documents loaders
-├── docs_publisher_controller/  # Documentation publishing logic
-├── doctype_diff_validator/    # Change type classification
-├── llama_idx_prototype/       # LlamaIndex integration
+├── docs_publisher_controller/  # Documentation publishing logic controller and decision making functions
+├── doctype_diff_validator/    # Validates the type of documention that should be created according to the change
+├── llama_idx_prototype/       # LlamaIndex integration first approach
 ├── prompts/                   # LLM prompt templates
 ├── scripts/                   # Utility scripts
 ├── utils/                     # Helper functions
 └── xhtml_generator/          # XHTML document generation
+diff.txt                      # Temporary files where the changes are written
+summary.xhtml                 # The draft summary documentation generated saved in this file for publishing
+api_ai_response.json          # This file is to save the validation of the documentatio ntype based on the changes
+event.json                    # This files let "act" library to simulate a pull request merged and close on local
 ```
 
 ## Setup
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/your-username/open-llm-prototype.git
+   git clone https://github.com/daferrom/open-llm-prototype.git
    cd open-llm-prototype
    ```
 
@@ -68,14 +74,15 @@ src/
    ```
 
 3. **Set up environment variables:**
+
    Create a `.env` file with:
    ```env
    MY_EMAIL=your-email@example.com
-   CONFLUENCE_API_TOKEN=your-confluence-api-token
-   CONFLUENCE_SPACE_KEY=your-confluence-space-key
-   GH_GPT4_API_KEY=your-gpt4-api-key
-   HF_API_TOKEN=your-huggingface-token
-   PHOENIX_API_KEY=your-phoenix-api-key
+   CONFLUENCE_API_TOKEN=your-confluence-api-token          # Get from: https://id.atlassian.com/manage-profile/security/api-tokens
+   CONFLUENCE_SPACE_KEY=your-confluence-space-key         # Found in Confluence Space Settings
+   GH_GPT4_API_KEY=your-gpt4-api-key                     # Get from: https://platform.openai.com/api-keys
+   HF_API_TOKEN=your-huggingface-token                   # Get from: https://huggingface.co/settings/tokens
+   PHOENIX_API_KEY=your-phoenix-api-key                  # Get from: https://phoenix.arize.com/settings/api-keys
    ```
 
 ## Usage
@@ -136,6 +143,13 @@ Triggered on PR merge to main, the workflow:
 5. Validates documentation type
 6. Generates documentation using LLMs
 7. Updates Confluence
+
+## Docs related
+
+[https://developer.atlassian.com/cloud/confluence/rest/v2/intro/#about](Confluence API V2 Docs)
+[https://huggingface.co/llamaindex] (Llama index docs)
+
+
 
 ## Contributing
 
