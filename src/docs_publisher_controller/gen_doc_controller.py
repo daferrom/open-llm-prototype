@@ -123,7 +123,7 @@ if  __name__ == "__main__":
     # Load .env only on local execution
     env_utils.load_env_if_local()
 
-    HF_API_TOKEN = os.getenv("MY_HF_TOKEN")
+    HF_API_TOKEN = os.getenv("HF_API_TOKEN")
     MODEL_NAME= "Qwen/Qwen2.5-Coder-32B-Instruct"
     MODEL_FOR_EMBEDD = "BAAI/bge-small-en-v1.5"
     XHTML_DOC_PATH = "summary.xhtml"
