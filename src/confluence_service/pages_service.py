@@ -26,9 +26,9 @@ BASE_URL = f"{BASE_DOMAIN}{CONFLUENCE_API_V2}/pages"
 SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
 
 USERNAME = os.getenv("MY_EMAIL")
-API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN_4")
+CONFLUENCE_API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
 
-auth= HTTPBasicAuth(USERNAME, API_TOKEN)
+auth= HTTPBasicAuth(USERNAME, CONFLUENCE_API_TOKEN)
 
 headers = {
     "Accept": "application/json",
@@ -38,7 +38,7 @@ headers = {
 def get_page_content_by_id(page_id):
     response = requests.request(
         "GET",
-        url= f"{BASE_URL}/{page_id}?body-format=storage",
+        f"{BASE_URL}/{page_id}?body-format=storage",
         headers=headers,
         auth=auth,
     )
@@ -124,7 +124,7 @@ def get_all_pages():
         }
     # Debug logs for credential verification (without revealing actual values)
     # print(f"Username present: {USERNAME is not None and USERNAME != ''}" )
-    # print(f"API token present: {API_TOKEN is not None and API_TOKEN != ''}")
+    # print(f"API token present: {CONFLUENCE_API_TOKEN is not None and CONFLUENCE_API_TOKEN != ''}")
 
     
 
@@ -186,7 +186,7 @@ def createDocumentation(title,  content_xhtml, parentPageId=None):
     if parentPageId:
         data["ancestors"] = [{"id": parentPageId}]
 
-    auth = (USERNAME, API_TOKEN)
+    auth = (USERNAME, CONFLUENCE_API_TOKEN)
 
     # # POST Request to create confluence page 
     response = requests.post(f"{CONFLUENCE_URL}/content", headers=headers, auth=auth, data=json.dumps(data))
@@ -232,7 +232,7 @@ def updateContent(contenidoXML, pageId, version,title):
                 }
             }
         }
-        auth = (USERNAME, API_TOKEN)
+        auth = (USERNAME, CONFLUENCE_API_TOKEN)
 
         # # POST Request to create confluence page 
         return requests.put(f"{CONFLUENCE_URL}/content/{pageId}", headers=headers, auth=auth, data=json.dumps(data))
