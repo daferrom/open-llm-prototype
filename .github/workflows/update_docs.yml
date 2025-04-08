@@ -62,7 +62,7 @@ jobs:
               CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
               CONFLUENCE_SPACE_KEY: ${{ secrets.CONFLUENCE_SPACE_KEY }}
               CONFLUENCE_TOKEN_3: ${{ secrets.CONFLUENCE_TOKEN_3 }}
-              HF_API_TOKEN: ${{ secrets.MY_HF_TOKEN }}
+              HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}
               MY_EMAIL: ${{ secrets.MY_EMAIL }}
               PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
         run: |
@@ -78,7 +78,7 @@ jobs:
               CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
               CONFLUENCE_SPACE_KEY: ${{ secrets.CONFLUENCE_SPACE_KEY }}
               CONFLUENCE_TOKEN_3: ${{ secrets.CONFLUENCE_TOKEN_3 }}
-              HF_API_TOKEN: ${{ secrets.MY_HF_TOKEN }}
+              HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}
               MY_EMAIL: ${{ secrets.MY_EMAIL }}
               PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
         run: |
