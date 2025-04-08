@@ -74,7 +74,7 @@ src/
    CONFLUENCE_API_TOKEN=your-confluence-api-token
    CONFLUENCE_SPACE_KEY=your-confluence-space-key
    GH_GPT4_API_KEY=your-gpt4-api-key
-   MY_HF_TOKEN=your-huggingface-token
+   HF_API_TOKEN=your-huggingface-token
    PHOENIX_API_KEY=your-phoenix-api-key
    ```
 

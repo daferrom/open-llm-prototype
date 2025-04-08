@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 
 # Add 'src' to sys.path for allowing utils import
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from config.config import SPACE_ID
 
 # Load env variables from .env
 if os.getenv("GITHUB_ACTIONS") is None:
