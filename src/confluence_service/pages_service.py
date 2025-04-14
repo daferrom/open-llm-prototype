@@ -14,7 +14,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 # Load env variables from .env
 if os.getenv("GITHUB_ACTIONS") is None:
-    print("...Running Pages Service confluence doc from local")
+    # print("...Running Pages Service confluence doc from local")
     load_dotenv()
 
 # Configuration
@@ -357,4 +357,4 @@ def delete_page(id):
         return None
 
 if __name__ == "__main__":
-    print("...Running Pages Service confluence doc")
+    print("\n")
