@@ -19,9 +19,9 @@ if os.getenv("GITHUB_ACTIONS") is None:
 
 # Configuration
 CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api"
-BASE_DOMAIN = "https://nisum-team-aqnn9b9c.atlassian.net"
+CONFLUENCE_BASE_URL = os.getenv("CONFLUENCE_BASE_URL")
 CONFLUENCE_API_V2 = "/wiki/api/v2"
-BASE_URL = f"{BASE_DOMAIN}{CONFLUENCE_API_V2}/pages"
+BASE_URL = f"{CONFLUENCE_BASE_URL}{CONFLUENCE_API_V2}/pages"
 
 SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
 
