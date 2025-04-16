@@ -27,6 +27,7 @@ SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
 
 USERNAME = os.getenv("MY_EMAIL")
 CONFLUENCE_API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
+IMAGE_PATH = "architecture_diagram.png"
 
 auth= HTTPBasicAuth(USERNAME, CONFLUENCE_API_TOKEN)
 
@@ -356,5 +357,35 @@ def delete_page(id):
         print(f"⚠️ Unexpected error: {str(e)}")
         return None
 
+def upload_image_as_attachment(fileName):
+    unique_filename = fileName
+    unique_image_path = os.path.join(os.path.dirname(IMAGE_PATH), unique_filename)
+    UPLOAD_URL = f"{CONFLUENCE_URL}/wiki/rest/api/content/{PAGE_ID}/child/attachment"
+
+    with open(unique_image_path, "rb") as image_file:
+        image_data = image_file.read()
+
+    headers = {
+        "X-Atlassian-Token": "no-check",  
+    }
+
+    files = {
+        "file": (unique_filename, image_data),
+    }
+    response = requests.post(
+        UPLOAD_URL,
+        headers=headers,
+        auth=auth,
+        files=files,
+    )
+
+    if response.status_code == 200:
+        print("Imagen cargada exitosamente.")
+        attachment_data = response.json()
+        attachment_id = attachment_data["results"][0]["id"]
+        return attachment_id
+    else:
+        print(f"Error al cargar la imagen: {response.status_code} - {response.text}")
+        return None
 if __name__ == "__main__":
     print("\n")
