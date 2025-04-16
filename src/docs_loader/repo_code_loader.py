@@ -124,6 +124,52 @@ if __name__ == "__main__":
     ***REMOVED***
 
     # example
-    response = query_engine.query("Based on the code structure, function and class names, what appears to be the purpose of this project?")
+    response = query_engine.query("""
+                                        You are a software architecture assistant. Based on the code, filenames, class and function names, and any package or framework dependencies found in this codebase, explain in detail:
+
+                                        1. What is the purpose of the overall project?
+                                        2. What major domains or subsystems can be identified?
+                                        3. What types of applications (APIs, databases, services, frontends) are present and how do they interact?
+
+                                        Also, return a JSON object following this exact schema:
+
+                                        {
+                                            "domain": {
+                                                "id": "",
+                                                "name": ""
+                                            },
+                                            "systems": [
+                                                {
+                                                "id": "",
+                                                "name": "",
+                                                "description": "",
+                                                "containers": [
+                                                    {
+                                                    "id": "",
+                                                    "name": "",
+                                                    "type": "",  // e.g. "app", "database"
+                                                    "description": "",
+                                                    "technology": "",
+                                                    "platform": "",
+                                                    "os": "",
+                                                    "infrastructure": "",  // e.g. "Cloud", "Onprem"
+                                                    "repo": ""
+                                                    }
+                                                ]
+                                                }
+                                            ],
+                                            "relationships": [
+                                                {
+                                                "source": "", // id from domain, sistems, or containers where born the relatioship
+                                                "target": "", // id from domain, sistems, or containers where finish the relationship
+                                                "description": "" // short relationship description
+                                                }
+                                            ]
+                                            }
+
+
+                                        Only return a valid JSON object and no extra text. Fill in the fields based on the best interpretation of the codebase and its relationships.
+
+                                    """)
     print("\nResponse:")
     print(response)
