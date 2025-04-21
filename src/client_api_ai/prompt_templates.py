@@ -439,5 +439,128 @@ prompt_templates = {
             "justification": "<specific_evidence_from_diff>",
             "confidence": <0.0-1.0>
         }}
+    """,
+    "BASE_DOCUMENTATION": """
+        You are a documentation assistant that analyzes a project's codebase and generates structured initial documentation. This project can be written in any programming language (e.g., JavaScript, Python, Go, Rust, Java, TypeScript, C#, etc.).
+
+        Use the following types of information, if available, to understand the project:
+        - File and folder names
+        - Source code comments and docstrings
+        - Configuration or manifest files (e.g. package.json, go.mod, pom.xml, Cargo.toml, etc.)
+        - Build scripts or CLI entry points
+        - Documentation files (e.g. README, CONTRIBUTING, LICENSE)
+        - Function and class names
+        - Dependency declarations
+        - Any other metadata or explicit data
+
+        **If information is missing for a section, include a placeholder like 'Not available'.**
+
+        ### **Output (XHTML Format)**
+        ```xml
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <title>Project Documentation</title>
+        </head>
+        <body>
+            <h1>Project Name</h1>
+            <p>[Brief description of the project and its purpose]</p>
+
+            <h2>Table of Contents</h2>
+            <ul>
+            <li><a href="#purpose">Purpose</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#usage">Usage</a></li>
+            <li><a href="#components">Key Components</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#development">Development</a></li>
+            <li><a href="#license">License</a></li>
+            </ul>
+
+            <h2 id="purpose">Purpose</h2>
+            <p>[Explain the main goal or problem the project solves]</p>
+
+            <h2 id="installation">Installation</h2>
+            <pre><code>[Installation or setup steps, based on detected ecosystem]</code></pre>
+
+            <h2 id="usage">Usage</h2>
+            <p>[Minimal example of how to run or use the project, CLI or API usage]</p>
+
+            <h2 id="components">Key Components</h2>
+            <ul>
+            <li>
+                <strong>[Component / Module / File]</strong>
+                <p>[Short description of what it does]</p>
+            </li>
+            <!-- Repeat as needed -->
+            </ul>
+
+            <h2 id="architecture">Architecture</h2>
+            <p>[High-level description of how the parts fit together]</p>
+
+            <h2 id="development">Development</h2>
+            <p>[Guidelines for contributing, developing, or testing]</p>
+
+            <h2 id="license">License</h2>
+            <p>[Name of license or "Not available"]</p>
+        </body>
+        </html>
+        ```
+    """,
+    "BASE_DOCUMENTATION_V2": """
+        You are an expert AI technical writer.
+        Based on the embedded code index — which includes components, configs, and metadata — infer and generate XHTML documentation for the project. 
+
+        If information is missing, provide a plausible default or inferred assumption. Avoid using vague phrases like 'Not available'; instead, suggest likely steps or describe what the reader might expect.
+
+        Use professional, concise, and accurate technical writing. Format the output exactly like this XHTML structure:
+
+        ```xml
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <title>Project Documentation</title>
+        </head>
+        <body>
+            <h1>Project Name</h1>
+            <p>[Brief description of the project and its purpose]</p>
+
+            <h2>Table of Contents</h2>
+            <ul>
+            <li><a href="#purpose">Purpose</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#usage">Usage</a></li>
+            <li><a href="#components">Key Components</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#development">Development</a></li>
+            <li><a href="#license">License</a></li>
+            </ul>
+
+            <h2 id="purpose">Purpose</h2>
+            <p>[Explain the main goal or problem the project solves]</p>
+
+            <h2 id="installation">Installation</h2>
+            <pre><code>[Installation or setup steps based on ecosystem: Node, Python, etc.]</code></pre>
+
+            <h2 id="usage">Usage</h2>
+            <p>[Example or command to run the app, CLI usage, API call, etc.]</p>
+
+            <h2 id="components">Key Components</h2>
+            <ul>
+            <li>
+                <strong>[Component / Module / File]</strong>
+                <p>[Short description of what it does and where it fits in the app]</p>
+            </li>
+            <!-- Repeat as needed -->
+            </ul>
+
+            <h2 id="architecture">Architecture</h2>
+            <p>[Describe how components, services, or modules are organized and interact]</p>
+
+            <h2 id="development">Development</h2>
+            <p>[Guidelines for contributing, running tests, or modifying code]</p>
+
+            <h2 id="license">License</h2>
+            <p>[License name, or a note stating that it could not be detected]</p>
+        </body>
+        </html>
     """
 }
