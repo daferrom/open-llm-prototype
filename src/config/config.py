@@ -30,3 +30,7 @@ CONFLUENCE_SPACE_KEY="~7120208ad1e699b38643e5ac9b38b6b02e26f2"
 MODEL_NAME= "Qwen/Qwen2.5-Coder-32B-Instruct" # Model for inferences in HF llama index
 
 MODEL_FOR_EMBEDDINGS = "BAAI/bge-small-en-v1.5" # Model for embeddings
+
+FILE_EXTS_TO_LOAD = [".md",".json", ".ts", "mjs", ".js", ".vue" ,".prisma", ".css", ".sql", ".gitignore"]
+
+CODE_DIRECTORY = "./src/code_repos"
