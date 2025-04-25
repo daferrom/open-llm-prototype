@@ -19,7 +19,7 @@ if os.getenv("GITHUB_ACTIONS") is None:
 
 # Configuration
 CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api"
-CONFLUENCE_BASE_URL = os.getenv("CONFLUENCE_BASE_URL")
+CONFLUENCE_BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net"
 CONFLUENCE_API_V2 = "/wiki/api/v2"
 BASE_URL = f"{CONFLUENCE_BASE_URL}{CONFLUENCE_API_V2}/pages"
 
@@ -172,11 +172,11 @@ def get_all_pages():
     print("Pages", pages)
     return pages
 
-def createDocumentation(title,  content_xhtml, parentPageId=None):
+def create_documentation_page(title,  content_xhtml, parent_page_id=None, space_key=SPACE_KEY):
     data = {
         "type": "page",
         "title": title,
-        "space": {"key": SPACE_KEY},
+        "space": {"key": space_key},
         "body": {
             "storage": {
                 "value": content_xhtml,
@@ -184,21 +184,21 @@ def createDocumentation(title,  content_xhtml, parentPageId=None):
             }
         }
     }
-    if parentPageId:
-        data["ancestors"] = [{"id": parentPageId}]
+    if parent_page_id:
+        data["ancestors"] = [{"id": parent_page_id}]
 
     auth = (USERNAME, CONFLUENCE_API_TOKEN)
 
-    # # POST Request to create confluence page 
+    # # POST Request to create confluence page
     response = requests.post(f"{CONFLUENCE_URL}/content", headers=headers, auth=auth, data=json.dumps(data))
 
     return response
 
-def getContentBytitle(title,parentPageId):
+def getContentBytitle(title,parent_page_id):
     try:
         return requests.request(
             "GET",
-            f"{CONFLUENCE_URL}/content/search?cql=title='{title}' AND ancestor=${parentPageId}&expand=body.storage,version",
+            f"{CONFLUENCE_URL}/content/search?cql=title='{title}' AND ancestor=${parent_page_id}&expand=body.storage,version",
             headers=headers,
             auth=auth,
             timeout=10

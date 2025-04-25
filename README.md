@@ -128,11 +128,22 @@ Always use squash merging to maintain clean git history.
    ```
 
 3. **Run workflow:**
+
+    *** For diferences in the own CoDA repo ***
+   ```sh
+   cp .env .secrets
+   act pull_request -e event.json --secret-file .secrets
+   ```
    ```sh
    cp .env .secrets
    act pull_request -e event.json --secret-file .secrets
    ```
 
+    Run to generate DOCs from zero
+    #TODO: Required to  setup config docker container and image
+    ```sh
+    act push -e event_push_simulated.json --secret-file .secrets --container-architecture linux/amd64
+    ```
 ### GitHub Actions Workflow
 
 Triggered on PR merge to main, the workflow:
@@ -143,6 +154,16 @@ Triggered on PR merge to main, the workflow:
 5. Validates documentation type
 6. Generates documentation using LLMs
 7. Updates Confluence
+
+### To generate base documentation code from zero
+
+Add the repo code folder on the folder src/code_repos/
+
+Then run the command: 
+
+```sh
+    python3 src/main_doc_creation.py
+```
 
 ## Docs related
 

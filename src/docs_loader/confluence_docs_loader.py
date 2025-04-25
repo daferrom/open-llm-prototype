@@ -13,7 +13,6 @@ from llama_index.vector_stores.chroma import ChromaVectorStore
 # Add 'src' to sys.path for allowing utils import
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from utils import env_utils
-# from llama_idx_prototype.llama_idx_prototype import set_vector_store ,load_confluence_docs_as_llama_idx_objs
 from confluence_service.pages_service import get_all_pages, get_child_pages
 from config.config import CONFLUENCE_API_BASE_URL,  PAGE_PARENTS_IDS, MODEL_FOR_EMBEDDINGS
 from tracers.phoenix_tracer import set_tracer_phoenix_config

@@ -1,7 +1,7 @@
 venv
-.env
-.secrets
 doc_chroma_db
 diff.txt
 summary.xhtml
 api_ai_response.json
+src/data/
+temp/

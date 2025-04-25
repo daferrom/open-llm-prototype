@@ -74,7 +74,7 @@ labels = [
     "getLightHouseResult",
     "runLightHouseTest"]
 
-# Modelos de embeddings
+# Embeddings Models
 model_configs = {
     "CodeBERT": ("microsoft/codebert-base", AutoModel),
     "GraphCodeBERT": ("microsoft/graphcodebert-base", AutoModel),
@@ -97,13 +97,13 @@ def get_embeddings(model_id, model_class, texts):
             embeddings.append(pooled)
     return embeddings
 
-# Obtener embeddings para cada modelo
+# Obtain embeddings for each model
 embeddings_by_model = {
     name: get_embeddings(mid, mclass, snippets)
     for name, (mid, mclass) in model_configs.items()
 }
 
-# Calcular similitudes de coseno entre snippet 0 y 1
+# Calculate cosine similarity between 1 - 0
 print("🔍 Cosine similarity per model:")
 for model_name, embeddings in embeddings_by_model.items():
     print(f"\n{model_name} similarities:")
@@ -112,7 +112,7 @@ for model_name, embeddings in embeddings_by_model.items():
         sim = cosine_similarity([embeddings[i]], [embeddings[j]])[0][0]
         print(f"  sim between embs {i}-{j} : {sim:.4f}")
 
-# Visualizar embeddings con PCA
+# Visualize embeddings with  PCA
 pca = PCA(n_components=2)
 plt.figure(figsize=(18, 6))
 for i, (model_name, embeddings) in enumerate(embeddings_by_model.items()):

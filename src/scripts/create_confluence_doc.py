@@ -31,7 +31,7 @@ CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api/conten
 XHTML_DOC_PATH = "summary.xhtml"
 
 def publish_to_confluence(title,  content_xhtml): 
-    response = pages_service.createDocumentation(title,content_xhtml)
+    response = pages_service.create_documentation_page(title, content_xhtml, parent_page_id=None, space_key=SPACE_KEY)
 
     if response.status_code in [200, 201]:
         print("✅ Page created successfully!")
