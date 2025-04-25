@@ -562,5 +562,524 @@ prompt_templates = {
             <p>[License name, or a note stating that it could not be detected]</p>
         </body>
         </html>
-    """
+    """,
+    "GENERAL_DOCUMENTATION" : """
+        Act as a AI senior software engineer technical writer.
+
+        Based on the embedded code index — which includes components, configs, and metadata — infer and generate XHTML professional technical overview of the project for the project.
+
+        If information is missing, provide a plausible default or inferred assumption. Avoid using vague phrases like 'Not available'; instead, suggest likely steps or describe what the reader might expect.
+
+
+        Format the output following this XHTML structure:
+
+        ### **Output (XHTML Format)**
+        ```xml
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <title>[Project Documentation name]</title>
+        </head>
+        <body>
+            <h1>Project Name</h1>
+            <p>[Brief description of the project and its purpose]</p>
+
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#general-purpose">General Purpose</a></li>
+                <li><a href="#problem-or-need">Problem or Need</a></li>
+                <li><a href="#target-audience">Target Audience </li>
+                <li><a href="#main-functionality">Main Functionality</a></li>
+                <li><a href="#components">Key Components</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#technologies-used"> Technologies used </a></li>
+                <li><a href="#basic-usage-flow"> Basic usage flow </a></li>
+                <li><a href="#development">Development</a></li>
+                <li><a href="#license">License</a></li>
+            </ul>
+
+            <h2 id="general-purpose">General purpose</h2>
+                <p>[What does this project do?]</p>
+
+            <h2 id="problem">Problem or Need</h2>
+            <p>[What problem does it solve?]</p>
+
+            <h2 id="main-functionality"> Main functionality </h2>
+                <p>[Summarize the key features or components]</p>
+
+            <h2 id="target-audience"> Target Audience</h2>
+                <p>[Who should use this system?s]</p>
+
+            <h2 id="components">Key Components </h2>
+                <ul>
+                    <li>
+                        <strong>[Component / Module / File]</strong>
+                        <p>[Short description of what it does and where it fits in the app]</p>
+                    </li>
+                    <!-- Repeat as needed -->
+                </ul>
+            <h2 id="architecture"> Architecture </h2>
+                <p>[Describe how components, services, or modules are organized and interact]</p>
+
+            <h2 id="technologies-used"> Technologies used </h2>
+                <ul>
+                    [List programming languages, frameworks, key libraries.]
+                    <li>
+                        <strong>[Technology (programming languages, framework and/or key libraries)]</strong>
+                        <p>[Short description of what it does in the app]</p>
+                    </li>
+                    <!-- Repeat as needed -->
+                </ul>
+
+            <h2 id="basic-usage-flow"> Basic Usage Flow </h2>
+                <p>[Briefly describe how the system or one of its main features is used.]</p>
+                    <ul>
+                        [List each one of the commmand if applies]
+                        <li>
+                            <p>[Briefly explanation of what the command does]<p>
+                            <pre><code>[Example(s) or command(s) to run the app, CLI usage, API call, etc.]</code></pre>
+                        </li>
+                        <!-- Repeat as needed -->
+                    </ul>
+
+            <h2 id="installation-setup">Set-up / installation</h2>
+                <p>[Briefly explanation of the setup process and/or installation]<p>
+                    <ul>
+                        <li>
+                            <p>[Briefly explanation of what the command does]<p>
+                            <pre><code>[Installation or setup steps based on ecosystem: Node, Python, etc.]</code></pre>
+                        </li>
+                        <!-- Repeat as needed -->
+                    </ul>
+            <h2 id="development">Development</h2>
+                <p>[Guidelines for contributing, running tests, or modifying code]</p>
+
+            <h2 id="license">License</h2>
+                <p>[License name, or a note stating that it could not be detected]</p>
+        </body>
+        </html>
+        ```
+    """,
+}
+
+
+
+
+doc_from_code_template_prompts = {
+    "CODE_DOCS_OVERVIEW": """
+            You are an expert technical writer specializing in software documentation. Your task is to generate the main **Code Documentation Overview Page** in XHTML format based on the provided embedded code index. This page introduces the system, its modules, and structure.
+
+            **Instructions:**
+            - **Analyze `{code_index}`** to understand the high-level architecture and main areas of functionality.
+            - **Generate a clear and informative title** for the documentation home page.
+            - **Describe the project as a whole**, including:
+                - What it does
+                - Its main modules or components
+                - How it's organized (folders, layers, domains)
+                - What technologies it uses (if evident)
+            - **This is not about code changes**, but about giving a first-time reader context and structure.
+
+            **Output (XHTML format):**
+            ```xml
+            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+            <html xmlns="http://www.w3.org/1999/xhtml">
+            <head>
+                <title><!-- Documentation Home Title --></title>
+            </head>
+            <body>
+                <h1><!-- Documentation Home Title --></h1>
+
+                <h2>Project Overview</h2>
+                <p><!-- What this system is and what it does --></p>
+
+                <h2>Modules and Structure</h2>
+                <p><!-- High-level description of modules and code structure --></p>
+
+                <h2>Technologies and Tools</h2>
+                <p><!-- Mention of frameworks, libraries, or languages used --></p>
+
+                <h2>Navigation Guide</h2>
+                <p><!-- Links or descriptions of where to go next in the documentation (e.g., components, APIs, setup) --></p>
+
+            </body>
+            </html>
+    """,
+    "API_DOCS_OVERVIEW": """
+            You are a technical writer specialized in API documentation.
+            Your task is to generate the **main index page for the API documentation**, using the information retrieved from this index.
+            If information is missing, provide a plausible default or inferred assumption. Avoid using vague phrases like 'Not available'; instead, suggest likely steps or describe what the reader might expect.
+
+            ---
+
+            **Instructions**:
+            - Retrieve all available **API modules**, sections, or services described in the codebase.
+            - For each one, extract:
+            - A clear title (e.g., "User Management API")
+            - An optional short description (from docblocks or headings)
+            - A normalized filename link (e.g., `user-management.html`)
+            - Organize them in a simple HTML/XHTML page that serves as the **table of contents**.
+            - ** Your response will be only and exclusively in the OUTPUT format on XHTML nothing more.
+
+            ---
+
+            **Output format** (XHTML 1.0 Strict):
+            ```xml
+                <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <title>API Documentation Index</title>
+                </head>
+                <body>
+                    <h1>API Documentation</h1>
+
+                    <h2>Overview</h2>
+                    <p>This page lists all available API modules discovered from the embedded code documentation. Each section links to its detailed reference.</p>
+
+                    <h2>API Modules</h2>
+                    <ul>
+                        <!-- Repeat this block per module discovered -->
+                        <li>
+                            <strong><a href="{normalized-filename}.html">{Module Title}</a></strong><br/>
+                            <em>{Optional one-line description}</em>
+                        </li>
+                        <!-- End repeat -->
+                    </ul>
+                </body>
+                </html>
+            ```
+        """,
+    "TECHNICAL_DOCS_OVERVIEW": """
+
+            You are a technical writer specializing in system architecture and design documentation. Your task is to generate **Technical Documentation** based on the embedded code index — which includes components, configs, and metadata — infer and generate XHTML professional technical overview for the project.
+
+            If information is missing, provide a plausible default or inferred assumption. Avoid using vague phrases like 'Not available'; instead, suggest likely steps or describe what the reader might expect.
+            ---
+
+            **Instructions**:
+            - Retrieve information from the embedded index about:
+                - **System Architecture** (e.g., key components, high-level design, interactions)
+                - **Data Flows** (e.g., how data moves across the system, pipelines)
+                - **Design Patterns** (e.g., Singleton, Factory, MVC, etc.)
+                - **Dependencies** (e.g., libraries, tools, platforms)
+                - **UML Diagrams** (or references to UML diagram files)
+                - **Database Schemas** (or references to schema diagrams)
+                - **Developer Guides** (e.g., how to set up, best practices)
+                - 
+
+            - Organize this information into a structured XHTML page, providing a clear overview with internal links to sub-sections for each category.
+
+            ---
+            **Output format** (XHTML 1.0 Strict):
+                ```xml
+                    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                        <head>
+                            <title>Technical Documentation</title>
+                        </head>
+                            <body>
+                                <h1>Technical Documentation</h1>
+
+                                <h2>Overview</h2>
+                                <p>This document provides an overview of the architecture, design patterns, data flows, and dependencies in the system.</p>
+
+                                <h2>System Architecture</h2>
+                                <p>{System Architecture Overview}</p>
+                                <h3>Key Components</h3>
+                                <ul>
+                                    <!-- List major components or services -->
+                                    <li>{Component Name}: {Short Description}</li>
+                                    <!-- Repeat for each component -->
+                                </ul>
+
+                                <h2>Data Flows</h2>
+                                <p>{Overview of data flows in the system, how data is processed and moved between components}</p>
+
+                                <h2>Design Patterns</h2>
+                                <p>{Overview of design patterns implemented in the system (e.g., Singleton, Factory, MVC, etc.)}</p>
+                                <ul>
+                                    <!-- List design patterns -->
+                                    <li>{Design Pattern Name}: {Brief Description}</li>
+                                    <!-- Repeat for each pattern -->
+                                </ul>
+
+                                <h2>Dependencies</h2>
+                                <p>{List of critical dependencies, libraries, platforms, etc.}</p>
+                                <ul>
+                                    <!-- List dependencies -->
+                                    <li>{Dependency Name}: {Description}</li>
+                                    <!-- Repeat for each dependency -->
+                                </ul>
+
+                                <h2>UML Diagrams</h2>
+                                <p>{References to UML diagrams or embedded diagrams}</p>
+
+                                <h2>Database Schemas</h2>
+                                <p>{References or images of database schemas, ER diagrams, etc.}</p>
+
+                                <h2>Developer Guide</h2>
+                                <p>{Overview of development setup, guidelines, and best practices}</p>
+                            </body>
+                    </html>
+                ```
+            """,
+    "USER_DOCS_OVERVIEW": """
+                You are a technical writer specializing in creating **User Documentation**. Your task is to generate user-friendly guides and tutorials based on the embedded code index — which includes components, configs, and metadata — infer and generate XHTML professional user overview for the project.
+
+                Your focus should be on how to guide users to effectively use it.
+
+                If information is missing, provide a plausible default or inferred assumption. Avoid using vague phrases like 'Not available'; instead, suggest likely steps or describe what the reader might expect.
+
+                ---
+
+                **Instructions**:
+                - Retrieve or infer information from the embedded index about:
+                    - **Step-by-Step Guides** (instructions on how to perform specific tasks within the software)
+                    - **Tutorials** (more in-depth, task-focused walkthroughs)
+                    - **User Manual** (comprehensive document detailing the software's functionality, including sections for different user needs)
+                    - **Screenshots or Illustrations** (if available, embed or link to relevant images or diagrams)
+                    - ** Your response will be only and exclusively in the OUTput format on XHTML nothing else.
+
+                - Organize this information into a user-friendly, easy-to-read HTML page with clear instructions, links to additional resources, and visual aids.
+
+                ---
+
+                ### **Output (XHTML Format)**
+                ```xml
+                <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <title>User Documentation</title>
+                </head>
+                <body>
+                    <h1>User Documentation</h1>
+
+                    <h2>Overview</h2>
+                    <p>This document serves as the main guide to help you use the software efficiently and get the most out of its features.</p>
+
+                    <h2>Getting Started</h2>
+                    <p>Here is a brief introduction to the software and how to set it up for the first time.</p>
+
+                    <h3>Installation</h3>
+                    <p>{Installation Instructions}</p>
+
+                    <h3>Initial Setup</h3>
+                    <p>{Step-by-step guide to initial configuration or setup process}</p>
+
+                    <h2>Step-by-Step Guides</h2>
+                    <p>{Detailed, easy-to-follow instructions on how to complete common tasks or features of the software}</p>
+                    <ul>
+                        <!-- List common tasks -->
+                        <li><a href="#task1">{Task 1 Name}</a></li>
+                        <li><a href="#task2">{Task 2 Name}</a></li>
+                        <!-- Repeat for each task -->
+                    </ul>
+
+                    <h2>Tutorials</h2>
+                    <p>{More in-depth tutorials for specific user scenarios or workflows. Explain how to achieve specific outcomes using the software.}</p>
+
+                    <h3>{Tutorial Title 1}</h3>
+                    <p>{Detailed instructions for the tutorial}</p>
+
+                    <h3>{Tutorial Title 2}</h3>
+                    <p>{Detailed instructions for the tutorial}</p>
+
+                    <h2>User Manual</h2>
+                    <p>This section contains the full user manual for the software, including all features,
+            """,
+    "INSTALLATION_AND_CONFIGURATION_OVERVIEW": """
+            You are a technical writer focused on developer experience. Your task is to generate **Installation & Configuration Documentation** based on the embedded code index.
+
+            This documentation is intended to help new developers or DevOps engineers set up the development environment and configure the application.
+
+            If information is missing, provide a plausible default or inferred assumption. Avoid using vague phrases like 'Not available'; instead, suggest likely steps or describe what the reader might expect.
+
+            ---
+
+            **Instructions**:
+            - Extract relevant installation and configuration steps from the embedded index.
+            - Include details on:
+                - Project setup (cloning, dependency installation, scripts)
+                - Required environment variables
+                - Configuration files (e.g., `.env`, `config.yaml`)
+                - Docker setup (Dockerfiles, docker-compose)
+                - Deployment instructions (for staging, production, etc.)
+                - Your response will be only and exclusively in the OUTput format on XHTML nothing else.
+
+            - Format the documentation in valid XHTML for structured internal documentation.
+
+            ---
+
+            **Output format** (XHTML 1.0 Strict):
+            ```xml
+                <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <title>Installation & Configuration</title>
+                </head>
+                <body>
+                    <h1>Installation & Configuration</h1>
+
+                    <h2>Clone the Repository</h2>
+                    <p>Use the following command to clone the project:</p>
+                    <pre><code>git clone https://github.com/your-org/your-project.git</code></pre>
+
+                    <h2>Install Dependencies</h2>
+                    <p>Install project dependencies:</p>
+                    <pre><code>npm install</code></pre>
+
+                    <h2>Environment Variables</h2>
+                    <p>Set the following environment variables (typically stored in a `.env` file):</p>
+                    <ul>
+                        <li><code>API_URL=https://api.example.com</code></li>
+                        <li><code>PORT=3000</code></li>
+                        <li><code>NODE_ENV=development</code></li>
+                    </ul>
+
+                    <h2>Start the Project</h2>
+                    <p>Run the development server:</p>
+                    <pre><code>npm run dev</code></pre>
+
+                    <h2>Docker Setup</h2>
+                    <p>To run the project using Docker:</p>
+                    <pre><code>docker-compose up --build</code></pre>
+
+                    <h2>Deployment</h2>
+                    <p>Follow these steps to deploy the application:</p>
+                    <ol>
+                        <li>Build the application: <code>npm run build</code></li>
+                        <li>Start the production server: <code>npm start</code></li>
+                        <li>Optional: Deploy using CI/CD or infrastructure-as-code tools</li>
+                    </ol>
+
+                </body>
+                </html>
+            ```
+    """,
+    "TESTING_DOCS_OVERVIEW": """
+                You are a technical writer specializing in creating **Testing Documentation**. Your task is to generate comprehensive testing documentation based on based on the embedded code index.
+
+                If information is missing, provide a plausible default or inferred assumption, Avoid using vague phrases like 'Not available'; instead make testing proposal for the embedded project according to the XHTML,mentioning that is is explicitly a proposal.
+                ---
+
+                **Instructions**:
+                - Retrieve or infer information from the embedded index about:
+                    - **Testing Strategies** (unit tests, integration tests, end-to-end tests)
+                    - **Test Cases** (description of the various test cases, including the expected outcomes)
+                    - **Code Coverage Reports** (if available, embed or link to coverage reports such as `jest --coverage`)
+                    - **Test Management Tools** (links to TestRail, JIRA, or other tools used to manage and track tests)
+                    - ** Your response will be exclusively in the OUTPUT format on XHTML nothing more. Any extra comment that you have can be included Notes section.
+
+                - Organize this information into a structured, easy-to-read HTML page with sections clearly defined for each testing aspect.
+
+                ---
+
+                ### **Output (XHTML Format)**
+                ```xml
+                    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                    <head>
+                        <title>Testing Documentation</title>
+                    </head>
+                    <body>
+                        <h1>Testing Documentation</h1>
+
+                        <h2>Overview</h2>
+                        <p>This document outlines the testing strategies, test cases, and code coverage for the software project.</p>
+
+                        <h2>Testing Strategies</h2>
+                        <p>Here we describe the different strategies used to test the software, including unit tests, integration tests, and end-to-end tests.</p>
+
+                        <h3>Unit Testing</h3>
+                        <p>{Description of unit tests, framework used, and key test cases}</p>
+
+                        <h3>Integration Testing</h3>
+                        <p>{Description of integration tests, testing of interactions between components, and key test cases}</p>
+
+                        <h3>End-to-End Testing</h3>
+                        <p>{Description of end-to-end tests, testing of the full application workflow, and key test cases}</p>
+
+                        <h2>Test Cases</h2>
+                        <p>Here we describe the various test cases used in the software, the scenarios they cover, and their expected outcomes.</p>
+                        <ul>
+                            <li><b>Test Case 1:</b> {Test case description, including expected results}</li>
+                            <li><b>Test Case 2:</b> {Test case description, including expected results}</li>
+                            <!-- Repeat for each test case -->
+                        </ul>
+
+                        <h2>Code Coverage</h2>
+                        <p>{Link to or description of the code coverage report, such as Jest's coverage output}</p>
+                        <p>Coverage Report: <a href="{coverage_report_link}">View Coverage Report</a></p>
+
+                        <h2>Test Management Tools</h2>
+                        <p>This section contains links to the tools used for managing and tracking tests.</p>
+                            <ul>
+                                <li><a href="{TestRail_link}">TestRail</a> - Test case management tool</li>
+                                <li><a href="{JIRA_link}">JIRA</a> - Issue and project tracking tool</li>
+                                <!-- Add more tools if necessary -->
+                            </ul>
+                        <h2>Notes</h2>
+                        <p>This section contains any extra information or consideration about the testing</p>
+                    </body>
+                    </html>
+                ```
+            """,
+    "DEV_DOCS_PROCESS_OVERVIEW": """
+                You are a technical writer specializing in software development methodologies and workflows. Your task is to generate **Development Process Documentation** based on the embedded code index
+
+                If information is missing, provide a plausible default or inferred assumption. Avoid using vague phrases like 'Not available'; instead, suggest likely steps or describe what the reader might expect. And make the inferences to create the descriptions of the development lifecycle, version control strategies, code conventions, and team policies.
+
+                ---
+
+                **Instructions**:
+                - Extract and organize information from the embedded index related to:
+                - **Development Methodology** (Agile, Scrum, Kanban, etc.)
+                - **Git Workflow** (Git Flow, trunk-based development, etc.)
+                - **Definition of Done**
+                - **Pull Request Policies**
+                - **Code Conventions & Style Guides**
+                - **Quality Standards** (e.g., linters, static analysis, CI/CD policies)
+
+                - Format the documentation in structured XHTML, suitable for a centralized documentation hub.
+                - ** Your response will be only and exclusively in the OUTPUT format on XHTML nothing else.
+
+                ---
+
+                **Output format** (XHTML 1.0 Strict):
+                    ```xml
+                        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                        <html xmlns="http://www.w3.org/1999/xhtml">
+                        <head>
+                            <title>Development Process Documentation</title>
+                        </head>
+                        <body>
+                            <h1>Development Process Documentation</h1>
+
+                            <h2>Development Methodology</h2>
+                            <p>{Describe the methodology in use (Agile, Scrum, etc.), including sprints, ceremonies, and team roles}</p>
+
+                            <h2>Git Workflow</h2>
+                            <p>{Explain the version control model used, e.g., Git Flow or trunk-based development. Include diagrams if necessary}</p>
+
+                            <h2>Definition of Done</h2>
+                            <p>{Clearly define what constitutes a completed task or feature. May include testing, documentation, review, and deployment}</p>
+
+                            <h2>Pull Request Policies</h2>
+                            <p>{Outline how PRs should be created, reviewed, and merged. Include approval requirements and CI checks}</p>
+
+                            <h2>Code Conventions & Style Guides</h2>
+                            <p>{List and describe the coding standards, style guides, linters, and formatting tools used in the project}</p>
+
+                            <h2>Quality Standards</h2>
+                            <p>{Define code quality requirements such as coverage thresholds, CI pipelines, code review requirements, and performance checks}</p>
+
+                        </body>
+                        </html>
+                    ```
+            """,
 }

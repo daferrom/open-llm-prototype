@@ -2,6 +2,8 @@ import json
 ***REMOVED***
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Import utilities
 sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -32,6 +34,14 @@ def save_json_to_file(data: dict, filename: str = "api_ai_response.json") -> Non
 
 
 def main():
+    
+    # Load env variables from .env
+    if os.getenv("GITHUB_ACTIONS") is None:
+        # print("...Running Pages Service confluence doc from local")
+        load_dotenv()
+
+    SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
+
     """Executes document type validation based on the diff file."""
     diff_content = get_diff_file_content()
 
@@ -39,7 +49,7 @@ def main():
     # prompt_validator = doctype_validator.doctypeValidator(diff_content)
     
     # Process API response
-    InfoParentPage = pages_service.getContentBytitle(title="4. User Docs",parentPageId="5734416").json()["results"]
+    InfoParentPage = pages_service.getContentBytitle(title="4. User Docs",parent_page_id="5734416").json()["results"]
     if len(InfoParentPage) > 0:
         version = InfoParentPage[0]["version"]["number"]+1
         previusDocumentation = InfoParentPage[0]["body"]["storage"]["value"]
@@ -51,7 +61,7 @@ def main():
     else:
         promToSend = prompt_templates.prompt_templates["User"].format(diff_content=diff_content)
         api_response = client_api_ai.get_api_ai_response(promToSend)
-        pages_service.createDocumentation(title="4. User Docs",content_xhtml=api_response,parentPageId="5734416")
+        pages_service.create_documentation_page(title="4. User Docs",content_xhtml=api_response,parent_page_id="5734416",space_key=SPACE_KEY)
     # validated_data = clean_json_response(api_response)
 
     # # Save response to a JSON file

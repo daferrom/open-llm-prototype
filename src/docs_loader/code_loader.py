@@ -21,6 +21,3 @@ def load_code_file_as_docs(code_dir, file_exts_list):
 
 if __name__ == "__main__":
     print("...code loader running")
-    # documents = load_code_file_as_docs(CODE_DIRECTORY, FILE_EXTS_TO_LOAD)
-    # nodes =split_docs_by_prog_lang(documents)
-    # vector_store = set_vector_store_code_embs()
