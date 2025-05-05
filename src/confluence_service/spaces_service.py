@@ -45,7 +45,6 @@ def clean_empty_spaces_with_dashes(name: str, max_length: int = 255) -> str:
     return name[:max_length]
 
 
-
 def generate_auto_alias(name: str, max_length: int = 255) -> str:
     cleaned = re.sub(r'[^a-zA-Z0-9]', '', name.lower())
 
@@ -202,8 +201,7 @@ def get_spaces():
 ***REMOVED***
 
     data = json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
-    print(data)
-    return data
+    return response.json()
 
 if __name__ == "__main__":
     print("...Running spaces service module")

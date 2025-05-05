@@ -17,10 +17,9 @@ from confluence_service.pages_service import get_all_pages, get_child_pages
 from config.config import CONFLUENCE_API_BASE_URL,  PAGE_PARENTS_IDS, MODEL_FOR_EMBEDDINGS
 from tracers.phoenix_tracer import set_tracer_phoenix_config
 
-
-def set_confluence_loader():
+def set_confluence_loader(url):
     loader = ConfluenceReader(
-        base_url = CONFLUENCE_API_BASE_URL,
+        base_url = url,
         user_name = os.getenv("MY_EMAIL"),
         password = os.getenv("CONFLUENCE_API_TOKEN")
     )
@@ -33,8 +32,8 @@ def load_docs(loader):
 def convert_docs_to_llama_idx_objects(docs):
     return [Document(text=doc.text, metadata=doc.metadata) for doc in docs]
 
-def load_confluence_docs_as_llama_idx_objs():
-    loader = set_confluence_loader()
+def load_confluence_docs_as_llama_idx_objs(url):
+    loader = set_confluence_loader(url)
     loaded_docs = load_docs(loader)
     documents = convert_docs_to_llama_idx_objects(loaded_docs)
     return documents
@@ -48,7 +47,7 @@ def set_vector_store():
 # Update the db just with the updated or moddified docs
 def update_vector_store():
     print("🔄 Fetching Documents from Confluence...")
-    documents = load_confluence_docs_as_llama_idx_objs()
+    documents = load_confluence_docs_as_llama_idx_objs(url=CONFLUENCE_API_BASE_URL)
 
     if not documents:
         print("✅ No new documents found. Exiting...")

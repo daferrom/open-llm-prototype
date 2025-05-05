@@ -35,7 +35,12 @@ FILE_EXTS_TO_LOAD = [".md",".json", ".ts", "mjs", ".js", ".vue" ,".prisma", ".cs
 
 CODE_DIRECTORY = "./src/code_repos"
 
-CHROMA_DB_PATH = "./src/data/vector_store/code_chroma_code_t5_db"
+CHROMA_DB_PATH = "./src/data/vector_store/code_chroma_code_t5_db/"
 
 CODE_DB_COLLECTION = "code_docs"
+
+INDEX_DIR = "./src/data/vector_store/index_metadata/"
+
+SPACE_KEY_ENV_APP = "ENVIRONMENTMONITORINGAPPLICATIONTE0Y"
+
 

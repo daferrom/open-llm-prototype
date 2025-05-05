@@ -6,22 +6,24 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from index_loader.index_loader import load_code_index
 from llama_index.core import VectorStoreIndex, StorageContext
-from config.config import FILE_EXTS_TO_LOAD, CODE_DIRECTORY , CHROMA_DB_PATH ,CODE_DB_COLLECTION
-from docs_loader.nodes_loader import load_nodes
+from config.config import INDEX_DIR , CODE_DIRECTORY, FILE_EXTS_TO_LOAD
 from vector_store_setters.vector_store_code_embds_setter import set_vector_store_code_embs
 from index_creator.create_index import create_idx
+from index_creator.create_idx_from_docs_and_code import create_idx_from_docs_and_code
 
-def get_or_create_index(chroma_db_path, db_collection_name):
+def get_or_create_index(chroma_db_path, db_collection_name, space_key=None):
 
-    index_dir = "./src/data/vector_store/index_metadata/"
-
-    if os.path.exists(index_dir) and os.listdir(index_dir):
+    if os.path.exists(INDEX_DIR) and os.listdir(INDEX_DIR):
         print("...Loading index from storage...")
         return load_code_index(chroma_db_path, db_collection_name)
 
     else:
-        print("Creating new index...")
-        return create_idx()
+        if space_key is not None:
+            print("Creating new index based on docs and code...")
+            return create_idx_from_docs_and_code(space_key=space_key, code_directory=CODE_DIRECTORY, file_exts_to_load=FILE_EXTS_TO_LOAD)
+        else:
+            print("Creating new index from code base...")
+            return create_idx()
 
 if __name__ == "__main__":
     print("..running index getter")
