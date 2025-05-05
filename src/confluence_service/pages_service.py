@@ -22,6 +22,7 @@ CONFLUENCE_URL = "https://nisum-team-aqnn9b9c.atlassian.net/wiki/rest/api"
 CONFLUENCE_BASE_URL = "https://nisum-team-aqnn9b9c.atlassian.net"
 CONFLUENCE_API_V2 = "/wiki/api/v2"
 BASE_URL = f"{CONFLUENCE_BASE_URL}{CONFLUENCE_API_V2}/pages"
+BASE_URL_SPACES = f"{CONFLUENCE_BASE_URL}{CONFLUENCE_API_V2}/spaces"
 
 SPACE_KEY = os.getenv("CONFLUENCE_SPACE_KEY")
 
@@ -35,6 +36,22 @@ headers = {
     "Accept": "application/json",
     "Content-Type": "application/json"
 }
+
+def get_pages_in_space(space_id):
+    """ Get all pages in space"""
+
+    url = f"{BASE_URL_SPACES}/{space_id}/pages"
+
+    response = requests.request(
+        "GET",
+        url,
+        headers=headers,
+        auth=auth
+    )
+
+    data = response.json()
+    pages = data["results"]
+    return pages
 
 def get_page_content_by_id(page_id):
     response = requests.request(
