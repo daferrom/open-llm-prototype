@@ -1,20 +1,39 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request, Depends
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 from typing import Optional
-from app.services.rag_engine import query_index
+from server.app.db.db import SessionLocal
+from app.services.rag_engine import query_index ,query_with_history
+from app.db.models import ChatSession
 
 router = APIRouter()
 
 class ChatRequest(BaseModel):
     query: str
+    session_id: int
     top_k: Optional[int] = 5
     response_mode: Optional[str] = "compact"
     temperature: Optional[float] = 0.5
 
+def get_db():
+    """
+    Dependency to get the database session.
+    This function can be used in route handlers to access the database session.
+    """
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 
 @router.post("/chat")
-async def chat(request: ChatRequest):
+async def chat(request: ChatRequest , db: Session = Depends(get_db)):
+    session = db.query(ChatSession).filter_by(id=request.session_id).first()
+    
+    if not session: 
+        raise HTTPException(status_code=404, detail="Session not found")
     """
     Handles the chat endpoint for processing user queries.
 
@@ -37,14 +56,16 @@ async def chat(request: ChatRequest):
     """
 
     try:
-        response = query_index(
+        response = query_with_history(
             user_query=request.query,
+            session_id=request.session_id,
+            db=db,
             top_k=request.top_k,
             response_mode=request.response_mode,
             temperature=request.temperature
     ***REMOVED***
 
-        return { "response": response}
+        return { "response": response }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
