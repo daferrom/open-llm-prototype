@@ -36,8 +36,9 @@ def query_with_history(user_query: str, session_id: int, db: Session, top_k=8, r
 
     chat_engine = index.as_chat_engine(
         llm=OpenAI(model="gpt-4", temperature=temperature),
+        chat_mode="context",
         chat_history=chat_history,
-        system_prompt="You are a helpful assistant for understanding code projects.",
+        system_prompt="You are a helpful assistant for understanding code projects based on the embedded code and documentation the index",
         similarity_top_k=top_k,
         response_mode=response_mode
     )
