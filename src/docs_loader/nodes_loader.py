@@ -12,6 +12,7 @@ from confluence_service.pages_service import get_pages_in_space
 from llama_index.readers.confluence import ConfluenceReader
 from config.config import FILE_EXTS_TO_LOAD, CODE_DIRECTORY, CONFLUENCE_API_BASE_URL, CHROMA_DB_PATH, CODE_DB_COLLECTION, INDEX_DIR
 from llama_index.core.node_parser import SentenceSplitter
+from dotenv import load_dotenv
 
 def load_code_nodes(code_dir, files_exts_to_load):
     documents = load_code_file_as_docs(code_dir, files_exts_to_load)
@@ -25,6 +26,11 @@ def load_code_nodes(code_dir, files_exts_to_load):
     return nodes
 
 def load_nodes_from_confluence_space(space_key):
+    # Load env variables from .env
+    if os.getenv("GITHUB_ACTIONS") is None:
+        print("...Running load_nodes_from_confluence_space from local")
+        load_dotenv()
+
     spaces = get_spaces()
 
     results = spaces["results"]

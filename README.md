@@ -9,7 +9,7 @@ This project automates the process of detecting code changes in a GitHub reposit
 
 2. **Validate Documentation Type** → Uses LLMs to analyze changes and classify into appropriate documentation categories:
    - Code documentation
-   - API documentation 
+   - API documentation
    - Technical documentation
    - User documentation
    - Installation & Configuration
@@ -35,8 +35,6 @@ This project automates the process of detecting code changes in a GitHub reposit
 - **Documentation**: Confluence API
 - **Languages**: Python
 - **Observability**: Phoenix/OpenTelemetry
-
-
 
 ## Project Structure
 
@@ -67,6 +65,11 @@ event.json                    # This files let "act" library to simulate a pull 
    cd open-llm-prototype
    ```
 
+2. **Activate a virtual environment for python packages_
+   ```sh
+      source venv/bin/activate
+   ```
+
 2. **Install dependencies:**
    ```sh
    python -m pip install --upgrade pip
@@ -88,7 +91,7 @@ event.json                    # This files let "act" library to simulate a pull 
 ## Usage
 
 ### Merging Strategy
-Always use squash merging to maintain clean git history.
+We recommend always use squash stratategy merging to maintain clean git history.
 
 ### Local Development Workflow
 
@@ -130,10 +133,20 @@ Always use squash merging to maintain clean git history.
 3. **Run workflow:**
 
     *** For diferences in the own CoDA repo ***
+
+    This runs the [update_docs.yml](.github/workflows/update_docs.yml) as a GithubAction on your local.
+
+    It simulates locally with the help of library "act" the  as a trigger pull-request or merge_request closed The event simulated is on this file [event.json](./event.json)
+    More trigger events can be configured for the project requirements.
+
+    For more info about githubActions check this : [update_docs.yml ](https://docs.github.com/en/actions/about-github-actions/understanding-github-actions)
+
    ```sh
    cp .env .secrets
    act pull_request -e event.json --secret-file .secrets
    ```
+
+   FOr M1 Architecture --container-architecture linux/amd64
    ```sh
    cp .env .secrets
    act pull_request -e event.json --secret-file .secrets
@@ -159,11 +172,12 @@ Triggered on PR merge to main, the workflow:
 
 Add the repo code folder on the folder src/code_repos/
 
-Then run the command: 
+Then run the command:
 
 ```sh
     python3 src/main_doc_creation.py
 ```
+python3 src/chatbot_coda/chatbot_env_monitor_app.py
 
 ## Docs related
 

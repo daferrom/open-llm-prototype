@@ -48,15 +48,15 @@ def set_llm_config(model_name, temp, max_tokens, hf_api_token):
 ***REMOVED***
 
 def get_llama_idx_query(index, prompt_query, llm):
-        print(f"🦙🦙🦙🦙🦙🦙🦙🦙🦙 Requesting response using llama idx query engine with model: {llm.model_name} 🦙🦙🦙🦙🦙🦙🦙🦙🦙")
+        print(f"🦙🦙🦙🦙 (llama_idx_prootype.py  get_llama_idx_query ) Requesting response using llama idx query engine with model: {llm.model_name} 🦙🦙🦙🦙")
         query_engine = index.as_query_engine(
             llm=llm,
             response_mode="tree_summarize",
 ***REMOVED***
         return query_engine.query(prompt_query)
-    
+
 def get_llama_idx_query_refined(index, prompt_query, llm):
-        print(f"🦙🦙🦙🦙🦙🦙🦙🦙🦙 Requesting response using llama idx query engine with model: {llm.model_name} 🦙🦙🦙🦙🦙🦙🦙🦙🦙")
+        print(f"🦙🦙🦙🦙🦙🦙🦙🦙🦙👌 (llama_idx_prootype.py  get_llama_idx_query_refined ) Requesting response using llama idx query engine with model: {llm.model_name} 🦙🦙🦙🦙🦙🦙🦙🦙🦙👌")
         query_engine = index.as_query_engine(
             llm=llm,
             response_mode="refine",

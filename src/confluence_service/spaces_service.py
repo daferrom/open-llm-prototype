@@ -201,7 +201,9 @@ def get_spaces():
 ***REMOVED***
 
     data = json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": "))
+    print("data", data)
     return response.json()
 
 if __name__ == "__main__":
+    get_spaces()
     print("...Running spaces service module")

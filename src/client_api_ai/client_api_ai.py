@@ -18,6 +18,9 @@ diff_file_path = workspace / "diff.txt"
 # Load .env only on local execution
 env_utils.load_env_if_local()
 
+# Just for non-prod Check this Documentation for more detail about How to use OpenAI API with Azure with a Github GPT4 key just(token):
+# https://www.youtube.com/watch?v=YP8mV_2RDLc
+
 API_KEY = os.getenv("GH_GPT4_API_KEY")
 
 client = OpenAI(
